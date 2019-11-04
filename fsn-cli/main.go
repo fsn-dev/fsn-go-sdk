@@ -34,8 +34,11 @@ var app *cli.App
 func init() {
 	app = utils.NewApp(gitCommit, "Fusion blockchain client")
 	app.Commands = []cli.Command{
+		// offline commands
 		offline.CommandDecodeRawTx,
 		offline.CommandSendAsset,
+		// online commands
+		online.CommandSendRawTx,
 		online.CommandGetAsset,
 	}
 	app.Flags = append(app.Flags, utils.VerbosityFlag)
