@@ -12,6 +12,20 @@ if [ $# -lt 1 ]; then
     exit
 fi
 
+if ! command -v go > /dev/null; then
+    echo "please install go"
+    exit
+fi
+
+version_gt() {
+    test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"
+}
+golang_version=$(go version |cut -d' ' -f3 |sed 's/go//')
+if (version_gt 1.11 $golang_version); then
+    echo "go version should be greater than or equal to 1.11"
+    exit
+fi
+
 build_project() {
     echo "----------- build $project -----------"
     main_file="./$project/main.go"
@@ -23,6 +37,11 @@ build_project() {
     go build -v -mod=vendor -o bin/$project $project/*.go
     echo "Build finished, run \"./bin/$project\" to launch."
 }
+
+if [[ ! -d vendor ]]; then
+    echo "please 'make vendor' or 'make vendor_with_proxy' firstly"
+    exit
+fi
 
 ignored_dirs="bin efsn scripts vendor"
 for project in "$@"; do
