@@ -26,13 +26,12 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-// Git SHA1 commit hash of the release (set via linker flags)
-var gitCommit = ""
+var appVersion = "0.1.0"
 
 var app *cli.App
 
 func init() {
-	app = utils.NewApp(gitCommit, "Fusion blockchain client")
+	app = utils.NewApp(appVersion, "Fusion blockchain client")
 	app.Commands = []cli.Command{
 		// offline commands
 		offline.CommandDecodeRawTx,

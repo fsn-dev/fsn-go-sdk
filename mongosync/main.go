@@ -24,13 +24,12 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-// Git SHA1 commit hash of the release (set via linker flags)
-var gitCommit = ""
+var appVersion = "1.0.0"
 
 var app *cli.App
 
 func init() {
-	app = utils.NewApp(gitCommit, "sync blocks into mongodb")
+	app = utils.NewApp(appVersion, "sync blocks into mongodb")
 	app.Commands = []cli.Command{
 		commandSyncAll,
 	}

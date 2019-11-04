@@ -20,6 +20,7 @@ package utils
 import (
 	"fmt"
 	"io"
+	"io/ioutil"
 	"os"
 	"os/user"
 	"path"
@@ -27,21 +28,20 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/params"
 	"gopkg.in/urfave/cli.v1"
 )
 
 // NewApp creates an app with sane defaults.
-func NewApp(gitCommit, usage string) *cli.App {
+func NewApp(appVersion, usage string) *cli.App {
 	app := cli.NewApp()
 	app.Name = filepath.Base(os.Args[0])
 	app.Author = ""
-	//app.Authors = nil
 	app.Email = ""
-	app.Version = params.VersionWithMeta
+	gitCommit := ReadGitCommit()
 	if len(gitCommit) >= 8 {
-		app.Version += "-" + gitCommit[:8]
+		appVersion += "-" + gitCommit[:8]
 	}
+	app.Version = appVersion
 	app.Usage = usage
 	return app
 }
@@ -105,5 +105,23 @@ func DefaultDataDir() string {
 		}
 	}
 	// As we cannot guess a stable location, return empty and handle later
+	return ""
+}
+
+// readGitFile returns content of file in .git directory.
+func readGitFile(file string) string {
+	content, err := ioutil.ReadFile(path.Join(".git", file))
+	if err != nil {
+		return ""
+	}
+	return strings.TrimSpace(string(content))
+}
+
+func ReadGitCommit() string {
+	head := readGitFile("HEAD")
+	if splits := strings.Split(head, " "); len(splits) == 2 {
+		head = splits[1]
+		return readGitFile(head)
+	}
 	return ""
 }
