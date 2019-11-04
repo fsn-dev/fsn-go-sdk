@@ -195,8 +195,7 @@ func (s *Syncer) fsync() error {
 }
 
 func (s *Syncer) checkSync(start, end uint64) {
-	tryDoTimes("fsync", s.fsync)
-
+	s.fsync()
 	log.Info("checkSync", "from", start, "to", end)
 	checkWorker := &Worker{
 		id:          -1,
@@ -209,8 +208,7 @@ func (s *Syncer) checkSync(start, end uint64) {
 	wg.Add(1)
 	go checkWorker.doSync(wg)
 	wg.Wait()
-
-	tryDoTimes("fsync", s.fsync)
+	s.fsync()
 }
 
 func (s *Syncer) doSyncWork() {

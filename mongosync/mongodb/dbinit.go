@@ -30,7 +30,7 @@ var (
 
 func MongoServerInit(mongoURL, dbName string) {
 	var err error
-	url := fmt.Sprintf("mongodb://%v", mongoURL)
+	url := fmt.Sprintf("mongodb://%v/%v", mongoURL, dbName)
 	fmt.Printf("mongodb url %v\n", url)
 	for {
 		session, err = mgo.Dial(url)
