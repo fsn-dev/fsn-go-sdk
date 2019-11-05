@@ -8,6 +8,7 @@ import (
 
 type FSNBaseArgsInterface interface {
 	BaseArgs() *FusionBaseArgs
+	ToData() ([]byte, error)
 }
 
 func (args *FusionBaseArgs) BaseArgs() *FusionBaseArgs {
@@ -126,6 +127,10 @@ type TakeMultiSwapArgs struct {
 }
 
 //////////////////// args ToParam, ToData, Init ///////////////////////
+
+func (args *FusionBaseArgs) ToData() ([]byte, error) {
+	return nil, nil
+}
 
 func (args *SendAssetArgs) ToParam() *SendAssetParam {
 	return &SendAssetParam{

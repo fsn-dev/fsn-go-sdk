@@ -19,7 +19,9 @@ package offline
 import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
+	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -45,19 +47,23 @@ func sendasset(ctx *cli.Context) error {
 	assetID := clicommon.GetHashFromText("assetID", assetID_)
 	to := clicommon.GetAddressFromText("to", to_)
 	value := clicommon.GetBigIntFromText("asset", value_)
-	commonOptions := getCommonOptions(ctx)
 
-	param := common.SendAssetParam{
-		AssetID: assetID,
-		To:      to,
-		Value:   value,
-	}
-	input, err := genTxInput(common.SendAssetFunc, &param)
-	if err != nil {
-		utils.Fatalf("generate tx input error: %v", err)
+	// 1. construct corresponding arguments and options
+	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
+	args := &common.SendAssetArgs{
+		FusionBaseArgs: baseArgs,
+		AssetID:        assetID,
+		To:             to,
+		Value:          (*hexutil.Big)(value),
 	}
 
-	tx, err := toFSNTx(input, commonOptions)
+	// 2. check parameters
+	if err := args.ToParam().Check(common.BigMaxUint64); err != nil {
+		utils.Fatalf("check parameter failed: %v", err)
+	}
+
+	// 3. build and/or sign transaction through fsnapi
+	tx, err := fsnapi.BuildFSNTx(common.SendAssetFunc, args, signOptions)
 	if err != nil {
 		utils.Fatalf("create tx error: %v", err)
 	}

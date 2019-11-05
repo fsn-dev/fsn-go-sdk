@@ -43,7 +43,7 @@ if [[ ! -d vendor ]]; then
     exit
 fi
 
-ignored_dirs="bin efsn scripts vendor"
+ignored_dirs="bin efsn scripts vendor fsnapi"
 for project in "$@"; do
     project=$(echo $project | sed 's#/*$##')
     [[ " $ignored_dirs " =~ " $project " ]] && continue

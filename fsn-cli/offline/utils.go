@@ -18,18 +18,15 @@ package offline
 
 import (
 	"fmt"
-	"io/ioutil"
 	"math/big"
-	"strings"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/keystore"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/params"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
+	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -75,48 +72,49 @@ var (
 	}
 )
 
-type CommonTxOptions struct {
-	nonce    uint64
-	gasLimit uint64
-	gasPrice *big.Int
-}
-
-type CommonSignOptions struct {
-	signer   common.Address
-	keyfile  string
-	passfile string
-}
-
-type CommonOptions struct {
-	needSign bool
-	*CommonTxOptions
-	*CommonSignOptions
-}
-
-func getCommonOptions(ctx *cli.Context) *CommonOptions {
+func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi.SignOptions) {
 	var (
-		needSign bool
-		txopts   CommonTxOptions
-		signopts CommonSignOptions
+		args     common.FusionBaseArgs
+		signopts *fsnapi.SignOptions
+
+		from     common.Address
+		nonce    uint64
+		gasLimit uint64
+		gasPrice *big.Int
 	)
 
-	needSign = ctx.Bool(signFlag.Name)
-
-	txopts.nonce = ctx.Uint64(accountNonceFlag.Name)
-	txopts.gasLimit = ctx.Uint64(gasLimitFlag.Name)
-	txopts.gasPrice = clicommon.GetBigIntFromText("gasPrice", ctx.String(gasPriceFlag.Name))
-
-	if needSign {
-		signopts.signer = clicommon.GetAddressFromText("from", ctx.String(senderFlag.Name))
-		signopts.keyfile = ctx.String(keyStoreFileFlag.Name)
-		signopts.passfile = ctx.String(utils.PasswordFileFlag.Name)
+	if ctx.IsSet(senderFlag.Name) {
+		from = clicommon.GetAddressFromText("from", ctx.String(senderFlag.Name))
+		args.From = from
 	}
 
-	return &CommonOptions{
-		needSign:          needSign,
-		CommonTxOptions:   &txopts,
-		CommonSignOptions: &signopts,
+	if ctx.IsSet(accountNonceFlag.Name) {
+		nonce = ctx.Uint64(accountNonceFlag.Name)
+		args.Nonce = new(hexutil.Uint64)
+		*(*uint64)(args.Nonce) = nonce
 	}
+
+	gasLimit = ctx.Uint64(gasLimitFlag.Name)
+	args.Gas = new(hexutil.Uint64)
+	*(*uint64)(args.Gas) = gasLimit
+
+	gasPrice = clicommon.GetBigIntFromText("gasPrice", ctx.String(gasPriceFlag.Name))
+	args.GasPrice = new(hexutil.Big)
+	*(*big.Int)(args.GasPrice) = *gasPrice
+
+	if ctx.Bool(signFlag.Name) {
+		signopts.Signer = from
+		signopts.Keyfile = ctx.String(keyStoreFileFlag.Name)
+		signopts.Passfile = ctx.String(utils.PasswordFileFlag.Name)
+		if args.From == (common.Address{}) ||
+			args.Nonce == nil ||
+			signopts.Keyfile == "" ||
+			signopts.Passfile == "" {
+			utils.Fatalf("Must provide (--%s --%s --%s --%s) options to sign transaction", senderFlag.Name, accountNonceFlag.Name, keyStoreFileFlag.Name, utils.PasswordFileFlag.Name)
+		}
+	}
+
+	return args, signopts
 }
 
 func printTx(tx *types.Transaction, json bool) error {
@@ -134,64 +132,4 @@ func printTx(tx *types.Transaction, json bool) error {
 		fmt.Println(hexutil.Bytes(bs))
 	}
 	return nil
-}
-
-type ParamInterface interface {
-	ToBytes() ([]byte, error)
-}
-
-func genTxInput(funcType common.FSNCallFunc, funcParam ParamInterface) ([]byte, error) {
-	funcData, err := funcParam.ToBytes()
-	if err != nil {
-		return nil, err
-	}
-	var param = common.FSNCallParam{Func: funcType, Data: funcData}
-	input, err := param.ToBytes()
-	if err != nil {
-		return nil, err
-	}
-	return input, nil
-}
-
-func toFSNTx(input []byte, commonOptions *CommonOptions) (tx *types.Transaction, err error) {
-	tx = types.NewTransaction(
-		commonOptions.nonce,
-		common.FSNCallAddress,
-		big.NewInt(0),
-		commonOptions.gasLimit,
-		commonOptions.gasPrice,
-		input,
-	)
-	if commonOptions.needSign {
-		tx, err = signTx(tx, commonOptions.CommonSignOptions)
-		if err != nil {
-			return nil, err
-		}
-	}
-	return tx, nil
-}
-
-func signTx(tx *types.Transaction, signOptions *CommonSignOptions) (*types.Transaction, error) {
-	keyjson, err := ioutil.ReadFile(signOptions.keyfile)
-	if err != nil {
-		return nil, err
-	}
-
-	passdata, err := ioutil.ReadFile(signOptions.passfile)
-	if err != nil {
-		return nil, err
-	}
-
-	passphrase := strings.TrimSpace(string(passdata))
-	key, err := keystore.DecryptKey(keyjson, passphrase)
-	if err != nil {
-		return nil, err
-	}
-
-	if key.Address != signOptions.signer {
-		return nil, fmt.Errorf("key content mismatch: have account %x, want %x", key.Address, signOptions.signer)
-	}
-
-	signer := types.NewEIP155Signer(params.MainnetChainConfig.ChainID)
-	return types.SignTx(tx, signer, key.PrivateKey)
 }
