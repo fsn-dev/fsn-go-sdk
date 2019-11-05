@@ -7,7 +7,7 @@ if [ ! -f "scripts/build.sh" ]; then
     exit 2
 fi
 
-if [ $# -lt 1 ]; then
+if (( $# < 1 )) || [[ "$1" = "-h" ]] || [[ "$1" = "--help" ]] ; then
     echo "Usage: $0 <project> [<project>...]"
     exit
 fi

@@ -15,13 +15,20 @@
 
 3. build project
 
-    ./scripts/build.sh fsn-cli
+    ./scripts/build.sh fsn-cli (take `fsn-cli` as example here)  
     or use `go build` manually
 
 4. run project
 
-    ./scripts/run.sh fsn-cli
+    ./scripts/run.sh fsn-cli (take `fsn-cli` as example here)  
     or ./bin/fsn-cli
+
+for conveniently, we also support building through `Makefile`, for example,
+
+    make fsn-cli
+    make mongosync
+    make vendor (import vendor packages)
+    make vendor_with_proxy (set goproxy if you can't get packages from golang.org)
 
 ## commitment notes
 
@@ -49,5 +56,9 @@
     add-license.sh - add LICENSE content to the file header
 
 * vendor	-- outside modules (use `go mod` to manage)
+
+* bin       -- binary output directory
+
+* fsnapi    -- supply API to build and sign transaction, etc.
 
 [//]: # (/* vim: set ts=4 sts=4 sw=4 et : */)
