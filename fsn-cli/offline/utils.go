@@ -103,6 +103,7 @@ func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi
 	*(*big.Int)(args.GasPrice) = *gasPrice
 
 	if ctx.Bool(signFlag.Name) {
+		signopts = &fsnapi.SignOptions{}
 		signopts.Signer = from
 		signopts.Keyfile = ctx.String(keyStoreFileFlag.Name)
 		signopts.Passfile = ctx.String(utils.PasswordFileFlag.Name)
