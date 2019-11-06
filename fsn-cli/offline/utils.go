@@ -72,15 +72,26 @@ var (
 	}
 )
 
+func getHexUint64(ctx *cli.Context, flagName string) *hexutil.Uint64 {
+	value := ctx.Uint64(flagName)
+	result := new(hexutil.Uint64)
+	*(*uint64)(result) = value
+	return result
+}
+
+func getHexBigInt(ctx *cli.Context, flagName string) *hexutil.Big {
+	value := clicommon.GetBigIntFromText(flagName, ctx.String(flagName))
+	result := new(hexutil.Big)
+	*(*big.Int)(result) = *value
+	return result
+}
+
 func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi.SignOptions) {
 	var (
 		args     common.FusionBaseArgs
 		signopts *fsnapi.SignOptions
 
-		from     common.Address
-		nonce    uint64
-		gasLimit uint64
-		gasPrice *big.Int
+		from common.Address
 	)
 
 	if ctx.IsSet(senderFlag.Name) {
@@ -89,18 +100,11 @@ func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi
 	}
 
 	if ctx.IsSet(accountNonceFlag.Name) {
-		nonce = ctx.Uint64(accountNonceFlag.Name)
-		args.Nonce = new(hexutil.Uint64)
-		*(*uint64)(args.Nonce) = nonce
+		args.Nonce = getHexUint64(ctx, accountNonceFlag.Name)
 	}
 
-	gasLimit = ctx.Uint64(gasLimitFlag.Name)
-	args.Gas = new(hexutil.Uint64)
-	*(*uint64)(args.Gas) = gasLimit
-
-	gasPrice = clicommon.GetBigIntFromText("gasPrice", ctx.String(gasPriceFlag.Name))
-	args.GasPrice = new(hexutil.Big)
-	*(*big.Int)(args.GasPrice) = *gasPrice
+	args.Gas = getHexUint64(ctx, gasLimitFlag.Name)
+	args.GasPrice = getHexBigInt(ctx, gasPriceFlag.Name)
 
 	if ctx.Bool(signFlag.Name) {
 		signopts = &fsnapi.SignOptions{}

@@ -36,6 +36,7 @@ func init() {
 		// offline commands
 		offline.CommandDecodeRawTx,
 		offline.CommandSendAsset,
+		offline.CommandBuyTicket,
 		// online commands
 		online.CommandSendRawTx,
 		online.CommandGetAsset,
