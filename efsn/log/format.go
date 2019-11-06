@@ -2,6 +2,7 @@ package log
 
 import (
 	"bytes"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -300,14 +301,37 @@ func formatShared(value interface{}) (result interface{}) {
 	switch v := value.(type) {
 	case time.Time:
 		return v.Format(timeFormat)
-
 	case error:
 		return v.Error()
-
 	case fmt.Stringer:
 		return v.String()
-
+	case []string:
+		return fmt.Sprintf("%+q", v)
+	case []byte:
+		return hex.EncodeToString(v)
+	case [][]byte:
+		str := "[ "
+		for _, item := range v {
+			str += hex.EncodeToString(item) + " "
+		}
+		str += "]"
+		return str
 	default:
+		t := reflect.TypeOf(v)
+		if t.Kind() != reflect.Slice {
+			return v
+		}
+		switch t.Elem().(type) {
+		case fmt.Stringer:
+			str := "[ "
+			s := reflect.ValueOf(v)
+			for i := 0; i < s.Len(); i++ {
+				elem := s.Index(i).Interface()
+				str += elem.(fmt.Stringer).String() + " "
+			}
+			str += "]"
+			return str
+		}
 		return v
 	}
 }
