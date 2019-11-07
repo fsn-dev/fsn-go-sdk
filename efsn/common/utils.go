@@ -22,14 +22,19 @@ func encode(value interface{}) interface{} {
 	switch v := value.(type) {
 	case time.Time:
 		return v.Format(termTimeFormat)
+
 	case error:
 		return v.Error()
+
 	case fmt.Stringer:
 		return v.String()
+
 	case []string:
 		return fmt.Sprintf("%+q", v)
+
 	case []byte:
 		return hex.EncodeToString(v)
+
 	case [][]byte:
 		str := "[ "
 		for _, item := range v {
@@ -37,15 +42,19 @@ func encode(value interface{}) interface{} {
 		}
 		str += "]"
 		return str
+
 	default:
 		t := reflect.TypeOf(v)
 		if t.Kind() != reflect.Slice {
 			return v
 		}
-		switch t.Elem().(type) {
+		s := reflect.ValueOf(v)
+		if s.Len() == 0 || !s.Index(0).CanInterface() {
+			return v
+		}
+		switch s.Index(0).Interface().(type) {
 		case fmt.Stringer:
 			str := "[ "
-			s := reflect.ValueOf(v)
 			for i := 0; i < s.Len(); i++ {
 				elem := s.Index(i).Interface()
 				str += elem.(fmt.Stringer).String() + " "
