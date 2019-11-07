@@ -33,7 +33,7 @@ func init() {
 	app.Commands = []cli.Command{
 		commandSyncAll,
 	}
-	app.Flags = append(app.Flags, utils.VerbosityFlag, jobsFlag)
+	app.Flags = append(app.Flags, jobsFlag, utils.VerbosityFlag, utils.JsonFlag)
 }
 
 var (

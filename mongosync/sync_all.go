@@ -18,6 +18,7 @@ package main
 
 import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
 	"github.com/FusionFoundation/fsn-go-sdk/mongosync/syncer"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -73,7 +74,7 @@ severURL support "http", "https", "ws", "wss", "stdio", IPC file`,
 }
 
 func syncAll(ctx *cli.Context) error {
-	utils.SetLogger(ctx)
+	log.SetLogger(ctx.GlobalInt(utils.VerbosityFlag.Name), ctx.GlobalBool(utils.JsonFlag.Name))
 	if len(ctx.Args()) == 0 {
 		cli.ShowCommandHelpAndExit(ctx, "syncAll", 1)
 	}

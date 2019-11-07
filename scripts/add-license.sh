@@ -32,7 +32,7 @@ if grep -q "GNU Lesser General Public License" $file; then
     exit
 fi
 
-echo "$LICENSE\n" | cat - $file > /tmp/tempfile
+echo -e "$LICENSE\n" | cat - $file > /tmp/tempfile
 mv /tmp/tempfile $file
 
 #/* vim: set ts=4 sts=4 sw=4 et : */

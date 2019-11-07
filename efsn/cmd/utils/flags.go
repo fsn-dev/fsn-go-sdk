@@ -20,7 +20,6 @@ package utils
 import (
 	"fmt"
 	"io/ioutil"
-	"os"
 	"strconv"
 	"strings"
 
@@ -144,6 +143,10 @@ var (
 		Usage: "Origins from which to accept websockets requests",
 		Value: "",
 	}
+	JsonFlag = cli.BoolFlag{
+		Name:  "json",
+		Usage: "output log in json format",
+	}
 )
 
 // MakeAddress converts an account specified directly as a hex encoded string or
@@ -187,11 +190,4 @@ func MakePasswordList(ctx *cli.Context) []string {
 		lines[i] = strings.TrimRight(lines[i], "\r")
 	}
 	return lines
-}
-
-func SetLogger(ctx *cli.Context) {
-	glogger := log.NewGlogHandler(log.StreamHandler(os.Stderr, log.TerminalFormat(false)))
-	verbosity := ctx.GlobalInt(VerbosityFlag.Name)
-	glogger.Verbosity(log.Lvl(verbosity))
-	log.Root().SetHandler(glogger)
 }

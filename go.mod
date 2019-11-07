@@ -7,7 +7,7 @@ require (
 	github.com/btcsuite/btcd v0.20.0-beta
 	github.com/deckarep/golang-set v1.7.1
 	github.com/fatih/color v1.7.0
-	github.com/go-stack/stack v1.8.0
+	github.com/inconshreveable/log15 v0.0.0-20180818164646-67afb5ed74ec
 	github.com/mattn/go-colorable v0.1.4
 	github.com/pborman/uuid v1.2.0
 	github.com/peterh/liner v1.1.0
