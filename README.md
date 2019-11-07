@@ -29,12 +29,13 @@ for conveniently, we also support building through `Makefile`, for example,
     make mongosync
     make vendor (import vendor packages)
     make vendor_with_proxy (set goproxy if you can't get packages from golang.org)
+    make fmt (format source code)
 
 ## commitment notes
 
 1. please make a new top level directory for each new project
 2. please provide help information for each command and sub-commands
-3. please run './scripts/gofmt.sh' to format codes before committing
+3. please run './scripts/gofmt.sh' or 'make fmt' to format codes before committing
 4. please run './scripts/add-license.sh `<newfile>`' to add lincense for new files
 
 ## common directories

@@ -1,4 +1,4 @@
-.PHONY: all test clean distclean
+.PHONY: all test clean distclean fmt
 .PHONY: vendor vendor_with_proxy
 .PHONY: account ethkey rlpdump
 .PHONY: fsn-cli mongosync
@@ -40,3 +40,6 @@ vendor:
 
 vendor_with_proxy:
 	./scripts/gomod.sh --proxy
+
+fmt:
+	./scripts/gofmt.sh
