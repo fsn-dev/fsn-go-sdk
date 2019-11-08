@@ -15,3 +15,54 @@
 // along with the fsn-go-sdk library. If not, see <http://www.gnu.org/licenses/>.
 
 package offline
+
+import (
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
+	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
+	"gopkg.in/urfave/cli.v1"
+)
+
+var CommandTakeMultiSwap = cli.Command{
+	Name:      "takemultiswap",
+	Usage:     "(offline) build take swap raw transaction",
+	ArgsUsage: "<swapID> <size>",
+	Description: `
+build take swap raw transaction`,
+	Flags:  append([]cli.Flag{}, commonFlags...),
+	Action: takemultiswap,
+}
+
+func takemultiswap(ctx *cli.Context) error {
+	if len(ctx.Args()) != 2 {
+		cli.ShowCommandHelpAndExit(ctx, "takemultiswap", 1)
+	}
+
+	swapID_ := ctx.Args().Get(0)
+	size_ := ctx.Args().Get(1)
+
+	swapID := clicommon.GetHashFromText("swapID", swapID_)
+	size := clicommon.GetBigIntFromText("size", size_)
+
+	// 1. construct corresponding arguments and options
+	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
+	args := &common.TakeMultiSwapArgs{
+		FusionBaseArgs: baseArgs,
+		SwapID:         swapID,
+		Size:           size,
+	}
+
+	// 2. check parameters
+	if args.Size.Sign() == 0 {
+		utils.Fatalf("check parameter failed, wrong size %s", size_)
+	}
+
+	// 3. build and/or sign transaction through fsnapi
+	tx, err := fsnapi.BuildFSNTx(common.TakeMultiSwapFunc, args, signOptions)
+	if err != nil {
+		utils.Fatalf("create tx error: %v", err)
+	}
+
+	return printTx(tx, false)
+}

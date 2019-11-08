@@ -70,6 +70,14 @@ var (
 		Name:  "description",
 		Usage: "",
 	}
+	swapFromAssetIDFlag = cli.StringFlag{
+		Name:  "fromasset",
+		Usage: "from asset's ID",
+	}
+	swapFromAmountFlag = cli.StringFlag{
+		Name:  "fromamount",
+		Usage: "from asset's amount",
+	}
 	swapFromStartFlag = cli.Uint64Flag{
 		Name:  "fromstart",
 		Usage: "swap from start time, defaults to now",
@@ -77,6 +85,14 @@ var (
 	swapFromEndFlag = cli.Uint64Flag{
 		Name:  "fromend",
 		Usage: "swap from end time, defaults to forever",
+	}
+	swapToAssetIDFlag = cli.StringFlag{
+		Name:  "toasset",
+		Usage: "to asset's ID",
+	}
+	swapToAmountFlag = cli.StringFlag{
+		Name:  "toamount",
+		Usage: "to asset's amount",
 	}
 	swapToStartFlag = cli.Uint64Flag{
 		Name:  "tostart",
@@ -89,5 +105,41 @@ var (
 	swapTargetsFlag = cli.StringSliceFlag{
 		Name:  "target",
 		Usage: "private swap addresses",
+	}
+	swapSwapSizeFlag = cli.StringFlag{
+		Name:  "swapsize",
+		Usage: "swap size",
+	}
+	multiSwapFromAssetIDFlag = cli.StringSliceFlag{
+		Name:  "fromassets",
+		Usage: "from assets's IDs",
+	}
+	multiSwapFromAmountFlag = cli.StringSliceFlag{
+		Name:  "fromamounts",
+		Usage: "from assets's amounts",
+	}
+	multiSwapFromStartFlag = cli.Int64SliceFlag{
+		Name:  "fromstarts",
+		Usage: "from assets's start times",
+	}
+	multiSwapFromEndFlag = cli.Int64SliceFlag{
+		Name:  "fromends",
+		Usage: "from assets's end times",
+	}
+	multiSwapToAssetIDFlag = cli.StringSliceFlag{
+		Name:  "toassets",
+		Usage: "to assets's IDs",
+	}
+	multiSwapToAmountFlag = cli.StringSliceFlag{
+		Name:  "toamounts",
+		Usage: "to assets's amounts",
+	}
+	multiSwapToStartFlag = cli.Int64SliceFlag{
+		Name:  "tostarts",
+		Usage: "to assets's start times",
+	}
+	multiSwapToEndFlag = cli.Int64SliceFlag{
+		Name:  "toends",
+		Usage: "to assets's end times",
 	}
 )

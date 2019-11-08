@@ -117,6 +117,22 @@ func getBigInt(ctx *cli.Context, flagName string) *big.Int {
 	return clicommon.GetBigIntFromText(flagName, ctx.String(flagName))
 }
 
+func getAddressSlice(ctx *cli.Context, flagName string) []common.Address {
+	return clicommon.GetAddressSlice(flagName, ctx.StringSlice(flagName))
+}
+
+func getHashSlice(ctx *cli.Context, flagName string) []common.Hash {
+	return clicommon.GetHashSlice(flagName, ctx.StringSlice(flagName))
+}
+
+func getHexBigIntSlice(ctx *cli.Context, flagName string) []*hexutil.Big {
+	return clicommon.GetHexBigIntSlice(flagName, ctx.StringSlice(flagName))
+}
+
+func getHexUint64Slice(ctx *cli.Context, flagName string) []*hexutil.Uint64 {
+	return clicommon.GetHexUint64Slice(flagName, ctx.Int64Slice(flagName))
+}
+
 func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi.SignOptions) {
 	var (
 		args     common.FusionBaseArgs

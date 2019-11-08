@@ -19,7 +19,6 @@ package offline
 import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
 	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
@@ -27,14 +26,19 @@ import (
 var CommandMakeSwap = cli.Command{
 	Name:      "makeswap",
 	Usage:     "(offline) build make swap raw transaction",
-	ArgsUsage: "<fromAssetID> <fomAmount> <toAssetID> <toAmount> <swapSize>",
+	ArgsUsage: "",
 	Description: `
 build make swap raw transaction`,
 	Flags: append([]cli.Flag{
+		swapFromAssetIDFlag,
+		swapFromAmountFlag,
 		swapFromStartFlag,
 		swapFromEndFlag,
+		swapToAssetIDFlag,
+		swapToAmountFlag,
 		swapToStartFlag,
 		swapToEndFlag,
+		swapSwapSizeFlag,
 		swapTargetsFlag,
 		descriptionFlag,
 	}, commonFlags...),
@@ -46,23 +50,16 @@ func makeswap(ctx *cli.Context) error {
 		cli.ShowCommandHelpAndExit(ctx, "makeswap", 1)
 	}
 
-	fromAssetID_ := ctx.Args().Get(0)
-	fromAmount_ := ctx.Args().Get(1)
-	toAssetID_ := ctx.Args().Get(2)
-	toAmount_ := ctx.Args().Get(3)
-	swapSize_ := ctx.Args().Get(4)
-
-	fomeAssetID := clicommon.GetHashFromText("fomeAssetID", fromAssetID_)
-	fromAmount := clicommon.GetHexBigIntFromText("fromAmount", fromAmount_)
-	toAssetID := clicommon.GetHashFromText("toAssetID", toAssetID_)
-	toAmount := clicommon.GetHexBigIntFromText("toAmount", toAmount_)
-	swapSize := clicommon.GetBigIntFromText("swapSize", swapSize_)
-
+	fomeAssetID := getHash(ctx, swapFromAssetIDFlag.Name)
+	fromAmount := getHexBigInt(ctx, swapFromAmountFlag.Name)
 	fromStartTime := getHexUint64Time(ctx, swapFromStartFlag.Name)
 	fromEndTime := getHexUint64Time(ctx, swapFromEndFlag.Name)
+	toAssetID := getHash(ctx, swapToAssetIDFlag.Name)
+	toAmount := getHexBigInt(ctx, swapToAmountFlag.Name)
 	toStartTime := getHexUint64Time(ctx, swapToStartFlag.Name)
 	toEndTime := getHexUint64Time(ctx, swapToEndFlag.Name)
-	targets := clicommon.GetAddressSlice("swapTargets", ctx.StringSlice(swapTargetsFlag.Name))
+	swapSize := getBigInt(ctx, swapSwapSizeFlag.Name)
+	targets := getAddressSlice(ctx, swapTargetsFlag.Name)
 	description := ctx.String(descriptionFlag.Name)
 
 	// 1. construct corresponding arguments and options

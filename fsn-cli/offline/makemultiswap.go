@@ -15,3 +15,82 @@
 // along with the fsn-go-sdk library. If not, see <http://www.gnu.org/licenses/>.
 
 package offline
+
+import (
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
+	"gopkg.in/urfave/cli.v1"
+)
+
+var CommandMakeMultiSwap = cli.Command{
+	Name:      "makemultiswap",
+	Usage:     "(offline) build make multi-swap raw transaction",
+	ArgsUsage: "",
+	Description: `
+build make multi-swap raw transaction`,
+	Flags: append([]cli.Flag{
+		multiSwapFromAssetIDFlag,
+		multiSwapFromAmountFlag,
+		multiSwapFromStartFlag,
+		multiSwapFromEndFlag,
+		multiSwapToAssetIDFlag,
+		multiSwapToAmountFlag,
+		multiSwapToStartFlag,
+		multiSwapToEndFlag,
+		swapSwapSizeFlag,
+		swapTargetsFlag,
+		descriptionFlag,
+	}, commonFlags...),
+	Action: makemultiswap,
+}
+
+func makemultiswap(ctx *cli.Context) error {
+	if len(ctx.Args()) != 3 {
+		cli.ShowCommandHelpAndExit(ctx, "makemultiswap", 1)
+	}
+
+	fomeAssetID := getHashSlice(ctx, multiSwapFromAssetIDFlag.Name)
+	fromAmount := getHexBigIntSlice(ctx, multiSwapFromAmountFlag.Name)
+	fromStartTime := getHexUint64Slice(ctx, multiSwapFromStartFlag.Name)
+	fromEndTime := getHexUint64Slice(ctx, multiSwapFromEndFlag.Name)
+	toAssetID := getHashSlice(ctx, multiSwapToAssetIDFlag.Name)
+	toAmount := getHexBigIntSlice(ctx, multiSwapToAmountFlag.Name)
+	toStartTime := getHexUint64Slice(ctx, multiSwapToStartFlag.Name)
+	toEndTime := getHexUint64Slice(ctx, multiSwapToEndFlag.Name)
+	swapSize := getBigInt(ctx, swapSwapSizeFlag.Name)
+	targets := getAddressSlice(ctx, swapTargetsFlag.Name)
+	description := ctx.String(descriptionFlag.Name)
+
+	// 1. construct corresponding arguments and options
+	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
+	args := &common.MakeMultiSwapArgs{
+		FusionBaseArgs: baseArgs,
+		FromAssetID:    fomeAssetID,
+		FromStartTime:  fromStartTime,
+		FromEndTime:    fromEndTime,
+		MinFromAmount:  fromAmount,
+		ToAssetID:      toAssetID,
+		ToStartTime:    toStartTime,
+		ToEndTime:      toEndTime,
+		MinToAmount:    toAmount,
+		SwapSize:       swapSize,
+		Targes:         targets,
+		Description:    description,
+	}
+
+	// 2. check parameters
+	now := getNowTime()
+	args.Init(getBigIntFromUint64(now))
+	if err := args.ToParam().Check(common.BigMaxUint64, now); err != nil {
+		utils.Fatalf("check parameter failed: %v", err)
+	}
+
+	// 3. build and/or sign transaction through fsnapi
+	tx, err := fsnapi.BuildFSNTx(common.MakeMultiSwapFunc, args, signOptions)
+	if err != nil {
+		utils.Fatalf("create tx error: %v", err)
+	}
+
+	return printTx(tx, false)
+}

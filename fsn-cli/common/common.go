@@ -57,6 +57,12 @@ func GetHexBigIntFromText(whatValue, bigIntStr string) *hexutil.Big {
 	return result
 }
 
+func GetHexUint64(value uint64) *hexutil.Uint64 {
+	result := new(hexutil.Uint64)
+	*(*uint64)(result) = value
+	return result
+}
+
 func GetBlockNumberFromText(numStr string) *big.Int {
 	number, ok := new(big.Int).SetString(numStr, 0)
 	if ok {
@@ -72,6 +78,30 @@ func GetAddressSlice(whatAddr string, addresses []string) []common.Address {
 	result := make([]common.Address, len(addresses))
 	for i, addr := range addresses {
 		result[i] = GetAddressFromText(whatAddr, addr)
+	}
+	return result
+}
+
+func GetHashSlice(whatHash string, hashes []string) []common.Hash {
+	result := make([]common.Hash, len(hashes))
+	for i, hash := range hashes {
+		result[i] = GetHashFromText(whatHash, hash)
+	}
+	return result
+}
+
+func GetHexBigIntSlice(whatValue string, bigInts []string) []*hexutil.Big {
+	result := make([]*hexutil.Big, len(bigInts))
+	for i, bi := range bigInts {
+		result[i] = GetHexBigIntFromText(whatValue, bi)
+	}
+	return result
+}
+
+func GetHexUint64Slice(whatValue string, nums []int64) []*hexutil.Uint64 {
+	result := make([]*hexutil.Uint64, len(nums))
+	for i, num := range nums {
+		result[i] = GetHexUint64(uint64(num))
 	}
 	return result
 }
