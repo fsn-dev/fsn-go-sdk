@@ -39,7 +39,16 @@ var (
 		Usage: "ticket end time, 0 means start + 1 month",
 		Value: 0,
 	}
-
+	timeLockStartFlag = cli.Uint64Flag{
+		Name:  "start",
+		Usage: "time lock start time, 0 means now",
+		Value: 0,
+	}
+	timeLockEndFlag = cli.Uint64Flag{
+		Name:  "end",
+		Usage: "time lock end time, 0 means forever",
+		Value: 0,
+	}
 	nameFlag = cli.StringFlag{
 		Name:  "name",
 		Usage: "",
