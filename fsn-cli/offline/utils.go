@@ -19,6 +19,7 @@ package offline
 import (
 	"fmt"
 	"math/big"
+	"time"
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
@@ -72,7 +73,25 @@ var (
 	}
 )
 
+func getNowTime() uint64 {
+	return uint64(time.Now().Unix())
+}
+
+func getBigIntFromUint64(num uint64) *big.Int {
+	return new(big.Int).SetUint64(num)
+}
+
 func getHexUint64(ctx *cli.Context, flagName string) *hexutil.Uint64 {
+	value := ctx.Uint64(flagName)
+	result := new(hexutil.Uint64)
+	*(*uint64)(result) = value
+	return result
+}
+
+func getHexUint64Time(ctx *cli.Context, flagName string) *hexutil.Uint64 {
+	if !ctx.IsSet(flagName) {
+		return nil
+	}
 	value := ctx.Uint64(flagName)
 	result := new(hexutil.Uint64)
 	*(*uint64)(result) = value

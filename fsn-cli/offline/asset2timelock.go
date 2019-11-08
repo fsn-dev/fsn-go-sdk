@@ -50,8 +50,8 @@ func asset2timelock(ctx *cli.Context) error {
 	to := clicommon.GetAddressFromText("to", to_)
 	value := clicommon.GetHexBigIntFromText("asset", value_)
 
-	start := getHexUint64(ctx, timeLockStartFlag.Name)
-	end := getHexUint64(ctx, timeLockEndFlag.Name)
+	start := getHexUint64Time(ctx, timeLockStartFlag.Name)
+	end := getHexUint64Time(ctx, timeLockEndFlag.Name)
 
 	// 1. construct corresponding arguments and options
 	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
@@ -67,8 +67,9 @@ func asset2timelock(ctx *cli.Context) error {
 	}
 
 	// 2. check parameters
+	now := getNowTime()
 	args.Init(common.AssetToTimeLock)
-	if err := args.ToParam().Check(common.BigMaxUint64, common.TimeLockForever); err != nil {
+	if err := args.ToParam().Check(common.BigMaxUint64, now); err != nil {
 		utils.Fatalf("check parameter failed: %v", err)
 	}
 

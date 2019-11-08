@@ -39,8 +39,8 @@ build buy ticket raw transaction`,
 }
 
 func buyticket(ctx *cli.Context) error {
-	start := getHexUint64(ctx, ticketStartFlag.Name)
-	end := getHexUint64(ctx, ticketEndFlag.Name)
+	start := getHexUint64Time(ctx, ticketStartFlag.Name)
+	end := getHexUint64Time(ctx, ticketEndFlag.Name)
 
 	// 1. construct corresponding arguments and options
 	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)

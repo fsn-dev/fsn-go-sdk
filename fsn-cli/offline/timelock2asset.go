@@ -59,8 +59,9 @@ func timelock2asset(ctx *cli.Context) error {
 	}
 
 	// 2. check parameters
+	now := getNowTime()
 	args.Init(common.TimeLockToAsset)
-	if err := args.ToParam().Check(common.BigMaxUint64, common.TimeLockForever); err != nil {
+	if err := args.ToParam().Check(common.BigMaxUint64, now); err != nil {
 		utils.Fatalf("check parameter failed: %v", err)
 	}
 

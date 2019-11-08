@@ -31,23 +31,19 @@ var (
 	}
 	ticketStartFlag = cli.Uint64Flag{
 		Name:  "start",
-		Usage: "ticket start time, 0 means now",
-		Value: 0,
+		Usage: "ticket start time, defaults to now",
 	}
 	ticketEndFlag = cli.Uint64Flag{
 		Name:  "end",
-		Usage: "ticket end time, 0 means start + 1 month",
-		Value: 0,
+		Usage: "ticket end time, defaults to start + 1 month",
 	}
 	timeLockStartFlag = cli.Uint64Flag{
 		Name:  "start",
-		Usage: "time lock start time, 0 means now",
-		Value: 0,
+		Usage: "time lock start time, defaults to now",
 	}
 	timeLockEndFlag = cli.Uint64Flag{
 		Name:  "end",
-		Usage: "time lock end time, 0 means forever",
-		Value: 0,
+		Usage: "time lock end time, defaults to forever",
 	}
 	nameFlag = cli.StringFlag{
 		Name:  "name",
@@ -73,5 +69,25 @@ var (
 	descriptionFlag = cli.StringFlag{
 		Name:  "description",
 		Usage: "",
+	}
+	swapFromStartFlag = cli.Uint64Flag{
+		Name:  "fromstart",
+		Usage: "swap from start time, defaults to now",
+	}
+	swapFromEndFlag = cli.Uint64Flag{
+		Name:  "fromend",
+		Usage: "swap from end time, defaults to forever",
+	}
+	swapToStartFlag = cli.Uint64Flag{
+		Name:  "tostart",
+		Usage: "swap to start time, defaults to now",
+	}
+	swapToEndFlag = cli.Uint64Flag{
+		Name:  "toend",
+		Usage: "swap to end time, defaults to forever",
+	}
+	swapTargetsFlag = cli.StringSliceFlag{
+		Name:  "target",
+		Usage: "private swap addresses",
 	}
 )
