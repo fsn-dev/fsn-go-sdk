@@ -14,41 +14,37 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with the fsn-go-sdk library. If not, see <http://www.gnu.org/licenses/>.
 
-package main
+package offline
 
 import (
-	"fmt"
-	"os"
-
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
-	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/offline"
-	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/online"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
 
-var appVersion = "0.1.0"
-
-var app *cli.App
-
-func init() {
-	app = utils.NewApp(appVersion, "Fusion blockchain client")
-	app.Commands = []cli.Command{
-		// offline commands
-		offline.CommandDecodeRawTx,
-		offline.CommandGenAsset,
-		offline.CommandSendAsset,
-		offline.CommandBuyTicket,
-		offline.CommandGenNotation,
-		// online commands
-		online.CommandSendRawTx,
-		online.CommandGetAsset,
-	}
-	app.Flags = append(app.Flags, utils.VerbosityFlag)
+var CommandGenNotation = cli.Command{
+	Name:      "gennotaion",
+	Usage:     "(offline) build generate notaion raw transaction",
+	ArgsUsage: "",
+	Description: `
+build generate notaion raw transaction`,
+	Flags:  append([]cli.Flag{}, commonFlags...),
+	Action: gennotaion,
 }
 
-func main() {
-	if err := app.Run(os.Args); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+func gennotaion(ctx *cli.Context) error {
+	// 1. construct corresponding arguments and options
+	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
+
+	// 2. check parameters
+	// no special argument, so no need to check
+
+	// 3. build and/or sign transaction through fsnapi
+	tx, err := fsnapi.BuildFSNTx(common.GenNotationFunc, &baseArgs, signOptions)
+	if err != nil {
+		utils.Fatalf("create tx error: %v", err)
 	}
+
+	return printTx(tx, false)
 }
