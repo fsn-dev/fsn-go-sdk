@@ -21,6 +21,7 @@ import (
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 )
 
 func GetHashFromText(whatHash, hashStr string) (hash common.Hash) {
@@ -44,6 +45,16 @@ func GetBigIntFromText(whatValue, bigIntStr string) *big.Int {
 		utils.Fatalf("Invalid %s value: %s", whatValue, bigIntStr)
 	}
 	return value
+}
+
+func GetHexBigIntFromText(whatValue, bigIntStr string) *hexutil.Big {
+	value, ok := new(big.Int).SetString(bigIntStr, 0)
+	if !ok {
+		utils.Fatalf("Invalid %s value: %s", whatValue, bigIntStr)
+	}
+	result := new(hexutil.Big)
+	*(*big.Int)(result) = *value
+	return result
 }
 
 func GetBlockNumberFromText(numStr string) *big.Int {

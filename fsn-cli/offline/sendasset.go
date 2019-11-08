@@ -19,7 +19,6 @@ package offline
 import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
 	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
@@ -46,7 +45,7 @@ func sendasset(ctx *cli.Context) error {
 
 	assetID := clicommon.GetHashFromText("assetID", assetID_)
 	to := clicommon.GetAddressFromText("to", to_)
-	value := clicommon.GetBigIntFromText("asset", value_)
+	value := clicommon.GetHexBigIntFromText("asset", value_)
 
 	// 1. construct corresponding arguments and options
 	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
@@ -54,7 +53,7 @@ func sendasset(ctx *cli.Context) error {
 		FusionBaseArgs: baseArgs,
 		AssetID:        assetID,
 		To:             to,
-		Value:          (*hexutil.Big)(value),
+		Value:          value,
 	}
 
 	// 2. check parameters

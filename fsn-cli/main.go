@@ -37,6 +37,8 @@ func init() {
 		offline.CommandDecodeRawTx,
 		offline.CommandGenAsset,
 		offline.CommandSendAsset,
+		offline.CommandDecAsset,
+		offline.CommandIncAsset,
 		offline.CommandBuyTicket,
 		offline.CommandGenNotation,
 		// online commands
