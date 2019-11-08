@@ -25,19 +25,6 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var (
-	startFlag = cli.Uint64Flag{
-		Name:  "start",
-		Usage: "ticket start time, 0 means now",
-		Value: 0,
-	}
-	endFlag = cli.Uint64Flag{
-		Name:  "end",
-		Usage: "ticket end time, 0 means start + 1 month",
-		Value: 0,
-	}
-)
-
 var CommandBuyTicket = cli.Command{
 	Name:      "buyticket",
 	Usage:     "(offline) build buy ticket raw transaction",
@@ -45,15 +32,15 @@ var CommandBuyTicket = cli.Command{
 	Description: `
 build buy ticket raw transaction`,
 	Flags: append([]cli.Flag{
-		startFlag,
-		endFlag,
+		ticketStartFlag,
+		ticketEndFlag,
 	}, commonFlags...),
 	Action: buyticket,
 }
 
 func buyticket(ctx *cli.Context) error {
-	start := getHexUint64(ctx, startFlag.Name)
-	end := getHexUint64(ctx, endFlag.Name)
+	start := getHexUint64(ctx, ticketStartFlag.Name)
+	end := getHexUint64(ctx, ticketEndFlag.Name)
 
 	// 1. construct corresponding arguments and options
 	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)

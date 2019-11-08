@@ -22,17 +22,6 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var (
-	decodeTxInputFlag = cli.BoolFlag{
-		Name:  "input",
-		Usage: "decode transaction input data",
-	}
-	decodeLogDataFlag = cli.BoolFlag{
-		Name:  "logdata",
-		Usage: "decode transaction receipt log data",
-	}
-)
-
 var CommandDecodeRawTx = cli.Command{
 	Name:      "decoderawtx",
 	Usage:     "(offline) decode raw transaction data",
