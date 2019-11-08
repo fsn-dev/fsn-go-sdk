@@ -86,6 +86,18 @@ func getHexBigInt(ctx *cli.Context, flagName string) *hexutil.Big {
 	return result
 }
 
+func getHash(ctx *cli.Context, flagName string) common.Hash {
+	return clicommon.GetHashFromText(flagName, ctx.String(flagName))
+}
+
+func getAddress(ctx *cli.Context, flagName string) common.Address {
+	return clicommon.GetAddressFromText(flagName, ctx.String(flagName))
+}
+
+func getBigInt(ctx *cli.Context, flagName string) *big.Int {
+	return clicommon.GetBigIntFromText(flagName, ctx.String(flagName))
+}
+
 func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi.SignOptions) {
 	var (
 		args     common.FusionBaseArgs

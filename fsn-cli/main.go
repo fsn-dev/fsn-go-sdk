@@ -35,6 +35,7 @@ func init() {
 	app.Commands = []cli.Command{
 		// offline commands
 		offline.CommandDecodeRawTx,
+		offline.CommandGenAsset,
 		offline.CommandSendAsset,
 		offline.CommandBuyTicket,
 		// online commands

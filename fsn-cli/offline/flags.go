@@ -29,7 +29,6 @@ var (
 		Name:  "logdata",
 		Usage: "decode transaction receipt log data",
 	}
-
 	ticketStartFlag = cli.Uint64Flag{
 		Name:  "start",
 		Usage: "ticket start time, 0 means now",
@@ -39,5 +38,31 @@ var (
 		Name:  "end",
 		Usage: "ticket end time, 0 means start + 1 month",
 		Value: 0,
+	}
+
+	nameFlag = cli.StringFlag{
+		Name:  "name",
+		Usage: "",
+	}
+	symbolFlag = cli.StringFlag{
+		Name:  "symbol",
+		Usage: "",
+	}
+	totalFlag = cli.StringFlag{
+		Name:  "total",
+		Usage: "",
+	}
+	decimalsFlag = cli.Uint64Flag{
+		Name:  "decimals",
+		Usage: "",
+		Value: 0,
+	}
+	canChangeFlag = cli.BoolFlag{
+		Name:  "canchange",
+		Usage: "can change total supply",
+	}
+	descriptionFlag = cli.StringFlag{
+		Name:  "description",
+		Usage: "",
 	}
 )
