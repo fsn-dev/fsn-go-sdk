@@ -17,13 +17,8 @@
 package offline
 
 import (
-	"bytes"
-	"fmt"
-
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
+	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -57,40 +52,35 @@ func decoderawtx(ctx *cli.Context) error {
 	}
 
 	hexstr := ctx.Args().First()
-	data, err := hexutil.Decode(hexstr)
-	if err != nil {
-		return fmt.Errorf("wrong arguments %v", err)
-	}
 
 	if ctx.Bool(decodeTxInputFlag.Name) {
-		return decodeTxInput(data)
+		return decodeTxInput(hexstr)
 	}
 
 	if ctx.Bool(decodeLogDataFlag.Name) {
-		return decodeLogData(data)
+		return decodeTxReceiptLogData(hexstr)
 	}
 
-	var tx types.Transaction
-	err = rlp.Decode(bytes.NewReader(data), &tx)
+	tx, err := fsnapi.DecodeRawTx(hexstr)
 	if err != nil {
-		return fmt.Errorf("decode raw transaction err %v", err)
+		return err
 	}
-	return printTx(&tx, true)
+	return printTx(tx, true)
 }
 
-func decodeTxInput(data []byte) error {
-	res, err := tools.DecodeTxInput(data)
+func decodeTxInput(hexstr string) error {
+	res, err := fsnapi.DecodeTxInput(hexstr)
 	if err != nil {
-		return fmt.Errorf("decode transaction input err %v", err)
+		return err
 	}
 	tools.MustPrintJSON(res)
 	return nil
 }
 
-func decodeLogData(data []byte) error {
-	res, err := tools.DecodeLogData(data)
+func decodeTxReceiptLogData(hexstr string) error {
+	res, err := fsnapi.DecodeTxReceiptLogData(hexstr)
 	if err != nil {
-		return fmt.Errorf("decode log data err %v", err)
+		return err
 	}
 	tools.MustPrintJSON(res)
 	return nil

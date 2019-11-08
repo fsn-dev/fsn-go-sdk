@@ -97,3 +97,42 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 	}
 	return nil
 }
+
+func (tx *Transaction) MarshalJSONWithSender() ([]byte, error) {
+	type txdata struct {
+		Sender       *common.Address `json:"from"`
+		AccountNonce hexutil.Uint64  `json:"nonce"`
+		Price        *hexutil.Big    `json:"gasPrice"`
+		GasLimit     hexutil.Uint64  `json:"gas"`
+		Recipient    *common.Address `json:"to"`
+		Amount       *hexutil.Big    `json:"value"`
+		Payload      hexutil.Bytes   `json:"input"`
+		V            *hexutil.Big    `json:"v"`
+		R            *hexutil.Big    `json:"r"`
+		S            *hexutil.Big    `json:"s"`
+		Hash         *common.Hash    `json:"hash"`
+	}
+
+	hash := tx.Hash()
+	t := tx.data
+	t.Hash = &hash
+
+	var sender *common.Address
+	if s, err := Sender(NewEIP155Signer(tx.ChainId()), tx); err == nil {
+		sender = &s
+	}
+
+	var enc txdata
+	enc.Sender = sender
+	enc.AccountNonce = hexutil.Uint64(t.AccountNonce)
+	enc.Price = (*hexutil.Big)(t.Price)
+	enc.GasLimit = hexutil.Uint64(t.GasLimit)
+	enc.Recipient = t.Recipient
+	enc.Amount = (*hexutil.Big)(t.Amount)
+	enc.Payload = t.Payload
+	enc.V = (*hexutil.Big)(t.V)
+	enc.R = (*hexutil.Big)(t.R)
+	enc.S = (*hexutil.Big)(t.S)
+	enc.Hash = t.Hash
+	return json.Marshal(&enc)
+}
