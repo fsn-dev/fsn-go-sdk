@@ -20,19 +20,23 @@ LICENSE=$(cat <<EOF
 EOF
 )
 
-if [ $# -ne 1 ]; then
+if (( $# > 0 )) && [[ "$1" = "-h" || "$1" = "--help" ]]; then
     echo "Usage: $0 <file>"
     exit
 fi
 
-file="$1"
+for file in $@; do
+    [[ ! -f "$file" ]] && echo "ignore non-exist file $file" && continue
 
-# already has the license
-if grep -q "GNU Lesser General Public License" $file; then
-    exit
-fi
+    # already has the license
+    if grep -q "GNU Lesser General Public License" $file; then
+        echo "ignore $file because it already has the license"
+        continue
+    fi
 
-echo -e "$LICENSE\n" | cat - $file > /tmp/tempfile
-mv /tmp/tempfile $file
+    echo -e "$LICENSE\n" | cat - $file > /tmp/tempfile
+    mv /tmp/tempfile $file
+    echo "add license to $file succeed"
+done
 
 #/* vim: set ts=4 sts=4 sw=4 et : */
