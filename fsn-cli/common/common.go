@@ -67,3 +67,11 @@ func GetBlockNumberFromText(numStr string) *big.Int {
 	}
 	return nil
 }
+
+func GetAddressSlice(whatAddr string, addresses []string) []common.Address {
+	result := make([]common.Address, len(addresses))
+	for i, addr := range addresses {
+		result[i] = GetAddressFromText(whatAddr, addr)
+	}
+	return result
+}
