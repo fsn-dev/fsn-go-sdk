@@ -68,8 +68,8 @@ func GetBlockNumberFromText(numStr string) *big.Int {
 	if ok {
 		return number
 	}
-	if numStr != "latest" || numStr != "pending" {
-		utils.Fatalf("Invalid block number: %s", numStr)
+	if numStr != "latest" && numStr != "pending" {
+		utils.Fatalf("Invalid block number: '%s'", numStr)
 	}
 	return nil
 }

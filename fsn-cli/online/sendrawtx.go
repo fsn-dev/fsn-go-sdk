@@ -40,6 +40,7 @@ broadcast offline signed raw transaction (hex encoded)`,
 }
 
 func sendrawtx(ctx *cli.Context) (err error) {
+	setLogger(ctx)
 	if len(ctx.Args()) != 1 {
 		cli.ShowCommandHelpAndExit(ctx, "sendrawtx", 1)
 	}

@@ -24,35 +24,36 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetAsset = cli.Command{
-	Name:      "getasset",
-	Usage:     "(online) get asset info",
-	ArgsUsage: "<assetID>",
+var CommandGetTimeLockBalance = cli.Command{
+	Name:      "gettimelockbalance",
+	Usage:     "(online) get time lock balance",
+	ArgsUsage: "<assetID> <address>",
 	Description: `
-get asset information`,
+get time lock balance`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getasset,
+	Action: gettimelockbalance,
 }
 
-func getasset(ctx *cli.Context) error {
+func gettimelockbalance(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 1 {
-		cli.ShowCommandHelpAndExit(ctx, "getasset", 1)
+	if len(ctx.Args()) != 2 {
+		cli.ShowCommandHelpAndExit(ctx, "gettimelockbalance", 1)
 	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
+	assetID := clicommon.GetHashFromText("assetID", ctx.Args().Get(0))
+	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	asset, err := client.GetAsset(context.Background(), assetID, blockNr)
+	balance, err := client.GetTimeLockBalance(context.Background(), assetID, address, blockNr)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(asset)
+	tools.MustPrintJSON(balance)
 	return nil
 }

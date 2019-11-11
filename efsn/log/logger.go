@@ -34,7 +34,7 @@ func New(ctx ...interface{}) *Logger {
 }
 
 func Trace(msg string, ctx ...interface{}) {
-	log15.Root().Debug(msg, ctx...)
+	Debug(msg, ctx...)
 }
 
 func Debug(msg string, ctx ...interface{}) {

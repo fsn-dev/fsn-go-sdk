@@ -19,6 +19,7 @@ package online
 import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/ethclient"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
 	"gopkg.in/urfave/cli.v1"
 )
 
@@ -42,4 +43,8 @@ func dialServer(ctx *cli.Context) *ethclient.Client {
 		utils.Fatalf("dial server %s err %v", serverAddr, err)
 	}
 	return client
+}
+
+func setLogger(ctx *cli.Context) {
+	log.SetLogger(ctx.GlobalInt(utils.VerbosityFlag.Name), ctx.GlobalBool(utils.JsonFlag.Name))
 }
