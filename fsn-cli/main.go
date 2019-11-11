@@ -53,6 +53,7 @@ func init() {
 		// online commands
 		online.CommandSendRawTx,
 		online.CommandGetAsset,
+		online.CommandGetBalance,
 		online.CommandGetTimeLockBalance,
 	}
 	app.Flags = append(app.Flags, utils.VerbosityFlag)
