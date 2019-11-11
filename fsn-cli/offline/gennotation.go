@@ -34,6 +34,7 @@ build generate notaion raw transaction`,
 }
 
 func gennotaion(ctx *cli.Context) error {
+	setLogger(ctx)
 	// 1. construct corresponding arguments and options
 	baseArgs, signOptions := getBaseArgsAndSignOptions(ctx)
 

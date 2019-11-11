@@ -35,6 +35,7 @@ build increase asset raw transaction`,
 }
 
 func incasset(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 3 {
 		cli.ShowCommandHelpAndExit(ctx, "incasset", 1)
 	}

@@ -25,6 +25,7 @@ import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
 	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
@@ -72,6 +73,10 @@ var (
 		utils.PasswordFileFlag,
 	}
 )
+
+func setLogger(ctx *cli.Context) {
+	log.SetLogger(ctx.GlobalInt(utils.VerbosityFlag.Name), ctx.GlobalBool(utils.JsonFlag.Name))
+}
 
 func getNowTime() uint64 {
 	return uint64(time.Now().Unix())

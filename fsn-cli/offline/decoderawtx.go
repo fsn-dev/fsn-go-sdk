@@ -36,6 +36,7 @@ decode raw transaction data`,
 }
 
 func decoderawtx(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 1 {
 		cli.ShowCommandHelpAndExit(ctx, "decoderawtx", 1)
 	}

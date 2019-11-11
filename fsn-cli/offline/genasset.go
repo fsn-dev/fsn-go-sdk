@@ -41,6 +41,7 @@ build generate asset raw transaction`,
 }
 
 func genasset(ctx *cli.Context) error {
+	setLogger(ctx)
 	name := ctx.String(nameFlag.Name)
 	symbol := ctx.String(symbolFlag.Name)
 	total := getHexBigInt(ctx, totalFlag.Name)

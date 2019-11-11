@@ -35,6 +35,7 @@ build decrease asset raw transaction`,
 }
 
 func decasset(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 3 {
 		cli.ShowCommandHelpAndExit(ctx, "decasset", 1)
 	}

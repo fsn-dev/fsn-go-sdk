@@ -35,6 +35,7 @@ build recall multi-swap raw transaction`,
 }
 
 func recallmultiswap(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 2 {
 		cli.ShowCommandHelpAndExit(ctx, "recallmultiswap", 1)
 	}

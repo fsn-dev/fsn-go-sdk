@@ -38,6 +38,7 @@ build timelock to timelock raw transaction`,
 }
 
 func timelock2timelock(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 3 {
 		cli.ShowCommandHelpAndExit(ctx, "timelock2timelock,", 1)
 	}

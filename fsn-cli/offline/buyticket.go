@@ -39,6 +39,7 @@ build buy ticket raw transaction`,
 }
 
 func buyticket(ctx *cli.Context) error {
+	setLogger(ctx)
 	start := getHexUint64Time(ctx, ticketStartFlag.Name)
 	end := getHexUint64Time(ctx, ticketEndFlag.Name)
 

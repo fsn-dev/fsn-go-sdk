@@ -46,6 +46,7 @@ build make swap raw transaction`,
 }
 
 func makeswap(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 3 {
 		cli.ShowCommandHelpAndExit(ctx, "makeswap", 1)
 	}

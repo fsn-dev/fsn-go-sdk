@@ -35,6 +35,7 @@ build send asset raw transaction`,
 }
 
 func sendasset(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 3 {
 		cli.ShowCommandHelpAndExit(ctx, "sendasset", 1)
 	}

@@ -38,6 +38,7 @@ build asset to timelock raw transaction`,
 }
 
 func asset2timelock(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 3 {
 		cli.ShowCommandHelpAndExit(ctx, "asset2timelock,", 1)
 	}

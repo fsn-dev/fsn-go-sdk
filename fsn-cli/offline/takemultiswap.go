@@ -35,6 +35,7 @@ build take swap raw transaction`,
 }
 
 func takemultiswap(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 2 {
 		cli.ShowCommandHelpAndExit(ctx, "takemultiswap", 1)
 	}

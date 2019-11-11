@@ -35,6 +35,7 @@ build recall swap raw transaction`,
 }
 
 func recallswap(ctx *cli.Context) error {
+	setLogger(ctx)
 	if len(ctx.Args()) != 2 {
 		cli.ShowCommandHelpAndExit(ctx, "recallswap", 1)
 	}
