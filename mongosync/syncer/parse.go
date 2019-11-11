@@ -36,6 +36,7 @@ const (
 	defaultCoinType  string = "FSN"
 	defaultTxType    string = "Origin"
 	defaultTryTimes  int    = 3
+	maxParseBlocks   int    = 1000
 )
 
 func tryDoTimes(name string, f func() error) {
@@ -60,6 +61,7 @@ func (w *Worker) Parse(block *types.Block, receipts types.Receipts) {
 
 func (w *Worker) startParser(wg *sync.WaitGroup) {
 	defer wg.Done()
+	count := 0
 	wg2 := new(sync.WaitGroup)
 	for {
 		select {
@@ -67,11 +69,17 @@ func (w *Worker) startParser(wg *sync.WaitGroup) {
 			if msg == nil {
 				return
 			}
+			count++
 			wg2.Add(2)
 			// parse block
 			go w.parseBlock(msg.block, msg.receipts, wg2)
 			// parse transactions
 			go w.parseTransactions(msg.block, msg.receipts, wg2)
+			if count == maxParseBlocks {
+				count = 0
+				wg2.Wait() // prevent memory exhausted (when blocks too large)
+
+			}
 		}
 	}
 	wg2.Wait()
@@ -182,13 +190,15 @@ func (w *Worker) parseTx(i int, tx *types.Transaction, block *types.Block, recei
 	}
 	mt.GasLimit = tx.Gas()
 	mt.GasPrice = tx.GasPrice().String()
-	mt.GasUsed = receipt.GasUsed
+	if receipt != nil {
+		mt.GasUsed = receipt.GasUsed
+		mt.Status = receipt.Status
+	}
 	mt.Timestamp = block.Time().Uint64()
 	txData := tx.Data()
 	if len(txData) > 0 {
 		mt.Input = hexutil.Encode(txData)
 	}
-	mt.Status = receipt.Status
 	mt.CoinType = defaultCoinType
 	mt.Type = defaultTxType
 
@@ -207,7 +217,7 @@ func parseFsnTx(mt *mongodb.MgoTransaction, tx *types.Transaction, receipt *type
 	rlp.DecodeBytes(tx.Data(), &fsnCall)
 	mt.Type = fsnCall.Func.Name() // mt.Type
 
-	if len(receipt.Logs) == 0 {
+	if receipt == nil || len(receipt.Logs) == 0 {
 		return
 	}
 	logData, err := tools.DecodeFSNLogData(fsnCall.Func, receipt.Logs[0].Data)

@@ -31,8 +31,9 @@ COMMANDS:
      help, h  Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --verbosity value  log verbosity (0-9) (default: 3)
    --jobs value       number of jobs (1-1000) (default: 10)
+   --verbosity value  log verbosity (0-9) (default: 3)
+   --json             output log in json format
    --help, -h         show help
    --version, -v      print the version
 ```
