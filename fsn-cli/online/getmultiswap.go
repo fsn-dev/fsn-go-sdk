@@ -26,6 +26,7 @@ import (
 
 var CommandGetMultiSwap = cli.Command{
 	Name:      "getmultiswap",
+	Aliases:   []string{"getmswap"},
 	Usage:     "(online) get multi-swap info",
 	ArgsUsage: "<swapID>",
 	Description: `

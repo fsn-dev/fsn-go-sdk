@@ -24,6 +24,7 @@ import (
 
 var CommandDecodeRawTx = cli.Command{
 	Name:      "decoderawtx",
+	Aliases:   []string{"decodetx"},
 	Usage:     "(offline) decode raw transaction data",
 	ArgsUsage: "<hexdata>",
 	Description: `

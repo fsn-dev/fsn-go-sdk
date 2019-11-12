@@ -54,6 +54,7 @@ func init() {
 		online.CommandGetBlock,
 		online.CommandGetTransaction,
 		online.CommandGetTransactionReceipt,
+		online.CommandGetTransactionAndReceipt,
 		online.CommandSendRawTx,
 		online.CommandGetAsset,
 		online.CommandGetBalance,
@@ -76,7 +77,6 @@ func init() {
 		online.CommandAllTickets,
 		online.CommandAllTicketsByAddress,
 		online.CommandAllInfoByAddress,
-		online.CommandGetTransactionAndReceipt,
 		online.CommandGetStakeInfo,
 		online.CommandGetBlockReward,
 	}

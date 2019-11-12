@@ -26,6 +26,7 @@ import (
 
 var CommandTotalNumberOfTicketsByAddress = cli.Command{
 	Name:      "totalnumberofticketsbyaddress",
+	Aliases:   []string{"totalticketsof"},
 	Usage:     "(online) get total number of tickets by address",
 	ArgsUsage: "<address>",
 	Description: `

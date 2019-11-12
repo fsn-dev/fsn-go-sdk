@@ -26,6 +26,7 @@ import (
 
 var CommandGetSnapshot = cli.Command{
 	Name:      "getsnapshot",
+	Aliases:   []string{"getsnap"},
 	Usage:     "(online) get snapshot",
 	ArgsUsage: "<blockNumber>",
 	Description: `

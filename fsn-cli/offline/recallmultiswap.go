@@ -26,6 +26,7 @@ import (
 
 var CommandRecallMultiSwap = cli.Command{
 	Name:      "recallmultiswap",
+	Aliases:   []string{"recallmswap"},
 	Usage:     "(offline) build recall multi-swap raw transaction",
 	ArgsUsage: "<swapID>",
 	Description: `

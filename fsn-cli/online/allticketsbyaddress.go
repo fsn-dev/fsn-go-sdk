@@ -26,6 +26,7 @@ import (
 
 var CommandAllTicketsByAddress = cli.Command{
 	Name:      "allticketsbyaddress",
+	Aliases:   []string{"gettickets"},
 	Usage:     "(online) get all tickets by address",
 	ArgsUsage: "<address>",
 	Description: `

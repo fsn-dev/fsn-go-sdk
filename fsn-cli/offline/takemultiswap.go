@@ -26,6 +26,7 @@ import (
 
 var CommandTakeMultiSwap = cli.Command{
 	Name:      "takemultiswap",
+	Aliases:   []string{"takemswap"},
 	Usage:     "(offline) build take swap raw transaction",
 	ArgsUsage: "<swapID> <size>",
 	Description: `

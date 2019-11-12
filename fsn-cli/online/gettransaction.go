@@ -26,6 +26,7 @@ import (
 
 var CommandGetTransaction = cli.Command{
 	Name:      "gettransaction",
+	Aliases:   []string{"gettx"},
 	Usage:     "(online) get transaction",
 	ArgsUsage: "<txHash>",
 	Description: `

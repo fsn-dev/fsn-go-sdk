@@ -26,6 +26,7 @@ import (
 
 var CommandGetTransactionAndReceipt = cli.Command{
 	Name:      "gettransactionandreceipt",
+	Aliases:   []string{"gettxandr"},
 	Usage:     "(online) get transaction and receipt",
 	ArgsUsage: "<txHash>",
 	Description: `
