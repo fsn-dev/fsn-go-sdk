@@ -42,7 +42,7 @@ var (
 	messageChanSize = 1000
 
 	retryDuration = time.Duration(1) * time.Second
-	waitDuration  = time.Duration(5) * time.Second
+	waitDuration  = time.Duration((averageBlockTime+1)/2) * time.Second
 
 	client     *ethclient.Client
 	cliContext = context.Background()
