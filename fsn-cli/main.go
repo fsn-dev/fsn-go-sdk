@@ -55,6 +55,7 @@ func init() {
 		online.CommandGetTransaction,
 		online.CommandGetTransactionReceipt,
 		online.CommandGetTransactionAndReceipt,
+		online.CommandGetTransactionCount,
 		online.CommandSendRawTx,
 		online.CommandGetAsset,
 		online.CommandGetBalance,
