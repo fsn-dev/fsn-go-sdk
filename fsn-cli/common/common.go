@@ -17,11 +17,14 @@
 package common
 
 import (
+	"fmt"
 	"math/big"
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
 )
 
 func GetHashFromText(whatHash, hashStr string) (hash common.Hash) {
@@ -109,4 +112,21 @@ func GetHexUint64Slice(whatValue string, nums []int64) []*hexutil.Uint64 {
 		result[i] = GetHexUint64(uint64(num))
 	}
 	return result
+}
+
+func PrintTx(tx *types.Transaction, json bool) error {
+	if json {
+		bs, err := tx.MarshalJSONWithSender(true)
+		if err != nil {
+			return fmt.Errorf("json marshal err %v", err)
+		}
+		fmt.Println(string(bs))
+	} else {
+		bs, err := rlp.EncodeToBytes(tx)
+		if err != nil {
+			return fmt.Errorf("rlp encode err %v", err)
+		}
+		fmt.Println(hexutil.Bytes(bs))
+	}
+	return nil
 }

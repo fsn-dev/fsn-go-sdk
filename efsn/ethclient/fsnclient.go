@@ -223,3 +223,12 @@ func (ec *Client) GetBlockReward(ctx context.Context, blockNr *big.Int) (*interf
 	}
 	return &result, nil
 }
+
+func (ec *Client) GetTransaction(ctx context.Context, txHash common.Hash) (*interface{}, error) {
+	var result interface{}
+	err := ec.c.CallContext(ctx, &result, "eth_getTransactionByHash", txHash)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}

@@ -52,6 +52,7 @@ func init() {
 		offline.CommandRecallMultiSwap,
 		// online commands
 		online.CommandGetBlock,
+		online.CommandGetTransaction,
 		online.CommandSendRawTx,
 		online.CommandGetAsset,
 		online.CommandGetBalance,

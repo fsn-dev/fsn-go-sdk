@@ -17,7 +17,6 @@
 package offline
 
 import (
-	"fmt"
 	"math/big"
 	"time"
 
@@ -26,7 +25,6 @@ import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
 	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
@@ -175,18 +173,5 @@ func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi
 }
 
 func printTx(tx *types.Transaction, json bool) error {
-	if json {
-		bs, err := tx.MarshalJSONWithSender(true)
-		if err != nil {
-			return fmt.Errorf("json marshal err %v", err)
-		}
-		fmt.Println(string(bs))
-	} else {
-		bs, err := rlp.EncodeToBytes(tx)
-		if err != nil {
-			return fmt.Errorf("rlp encode err %v", err)
-		}
-		fmt.Println(hexutil.Bytes(bs))
-	}
-	return nil
+	return clicommon.PrintTx(tx, json)
 }
