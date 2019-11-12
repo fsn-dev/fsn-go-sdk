@@ -53,6 +53,7 @@ func init() {
 		// online commands
 		online.CommandGetBlock,
 		online.CommandGetTransaction,
+		online.CommandGetTransactionReceipt,
 		online.CommandSendRawTx,
 		online.CommandGetAsset,
 		online.CommandGetBalance,

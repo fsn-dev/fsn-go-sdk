@@ -232,3 +232,12 @@ func (ec *Client) GetTransaction(ctx context.Context, txHash common.Hash) (*inte
 	}
 	return &result, nil
 }
+
+func (ec *Client) GetTransactionReceipt(ctx context.Context, txHash common.Hash) (*interface{}, error) {
+	var result interface{}
+	err := ec.c.CallContext(ctx, &result, "eth_getTransactionReceipt", txHash)
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
