@@ -101,11 +101,11 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 func (tx *Transaction) MarshalJSONWithSender(indent bool) ([]byte, error) {
 	type txdata struct {
 		Sender       *common.Address `json:"from"`
-		AccountNonce hexutil.Uint64  `json:"nonce"`
-		Price        *hexutil.Big    `json:"gasPrice"`
-		GasLimit     hexutil.Uint64  `json:"gas"`
+		AccountNonce uint64          `json:"nonce"`
+		Price        *big.Int        `json:"gasPrice"`
+		GasLimit     uint64          `json:"gas"`
 		Recipient    *common.Address `json:"to"`
-		Amount       *hexutil.Big    `json:"value"`
+		Amount       *big.Int        `json:"value"`
 		Payload      hexutil.Bytes   `json:"input"`
 		V            *hexutil.Big    `json:"v"`
 		R            *hexutil.Big    `json:"r"`
@@ -124,11 +124,11 @@ func (tx *Transaction) MarshalJSONWithSender(indent bool) ([]byte, error) {
 
 	var enc txdata
 	enc.Sender = sender
-	enc.AccountNonce = hexutil.Uint64(t.AccountNonce)
-	enc.Price = (*hexutil.Big)(t.Price)
-	enc.GasLimit = hexutil.Uint64(t.GasLimit)
+	enc.AccountNonce = t.AccountNonce
+	enc.Price = t.Price
+	enc.GasLimit = t.GasLimit
 	enc.Recipient = t.Recipient
-	enc.Amount = (*hexutil.Big)(t.Amount)
+	enc.Amount = t.Amount
 	enc.Payload = t.Payload
 	enc.V = (*hexutil.Big)(t.V)
 	enc.R = (*hexutil.Big)(t.R)

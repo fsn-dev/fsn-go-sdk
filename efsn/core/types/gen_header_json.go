@@ -136,3 +136,66 @@ func (h *Header) UnmarshalJSON(input []byte) error {
 	h.Nonce = *dec.Nonce
 	return nil
 }
+
+func (block *Block) MarshalJSON(indent bool) ([]byte, error) {
+	type Block struct {
+		Difficulty      *big.Int           `json:"difficulty"`
+		Extra           hexutil.Bytes      `json:"extraData"`
+		GasLimit        uint64             `json:"gasLimit"`
+		GasUsed         uint64             `json:"gasUsed"`
+		Hash            common.Hash        `json:"hash"`
+		Bloom           Bloom              `json:"logsBloom"`
+		Coinbase        common.Address     `json:"miner"`
+		MixDigest       common.Hash        `json:"mixHash"`
+		Nonce           BlockNonce         `json:"nonce"`
+		Number          *big.Int           `json:"number"`
+		ParentHash      common.Hash        `json:"parentHash"`
+		ReceiptHash     common.Hash        `json:"receiptsRoot"`
+		UncleHash       common.Hash        `json:"sha3Uncles"`
+		Size            common.StorageSize `json:"size"`
+		Root            common.Hash        `json:"stateRoot"`
+		Time            *big.Int           `json:"timestamp"`
+		TotalDifficulty *big.Int           `json:"totalDifficulty"`
+		Transactions    []common.Hash      `json:"transactions"`
+		TxHash          common.Hash        `json:"transactionsRoot"`
+		Uncles          []common.Hash      `json:"uncles"`
+	}
+
+	h := block.Header()
+	txs := block.Transactions()
+	uncles := block.Uncles()
+
+	var enc Block
+	enc.ParentHash = h.ParentHash
+	enc.UncleHash = h.UncleHash
+	enc.Coinbase = h.Coinbase
+	enc.Root = h.Root
+	enc.TxHash = h.TxHash
+	enc.ReceiptHash = h.ReceiptHash
+	enc.Bloom = h.Bloom
+	enc.Difficulty = h.Difficulty
+	enc.Number = h.Number
+	enc.GasLimit = h.GasLimit
+	enc.GasUsed = h.GasUsed
+	enc.Time = h.Time
+	enc.Extra = h.Extra
+	enc.MixDigest = h.MixDigest
+	enc.Nonce = h.Nonce
+	enc.Hash = h.Hash()
+
+	enc.Size = block.Size()
+	enc.TotalDifficulty = block.DeprecatedTd()
+	enc.Transactions = make([]common.Hash, len(txs))
+	for i, tx := range txs {
+		enc.Transactions[i] = tx.Hash()
+	}
+	enc.Uncles = make([]common.Hash, len(uncles))
+	for i, un := range uncles {
+		enc.Uncles[i] = un.Hash()
+	}
+
+	if indent {
+		return json.MarshalIndent(&enc, "", "  ")
+	}
+	return json.Marshal(&enc)
+}
