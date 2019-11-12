@@ -24,36 +24,33 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandGetTransactionAndReceipt = cli.Command{
+	Name:      "gettransactionandreceipt",
+	Usage:     "(online) get transaction and receipt",
+	ArgsUsage: "<txHash>",
 	Description: `
-get asset balance`,
+get transaction and receipt`,
 	Flags: []cli.Flag{
-		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: gettransactionandreceipt,
 }
 
-func getbalance(ctx *cli.Context) error {
+func gettransactionandreceipt(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
+	if len(ctx.Args()) != 1 {
+		cli.ShowCommandHelpAndExit(ctx, "gettransactionandreceipt", 1)
 	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
-	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	txHash := clicommon.GetHashFromText("txHash", ctx.Args().First())
+	tx, err := client.GetTransactionAndReceipt(context.Background(), txHash)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(tx)
 	return nil
 }

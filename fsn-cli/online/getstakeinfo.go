@@ -24,36 +24,31 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandGetStakeInfo = cli.Command{
+	Name:      "getstakeinfo",
+	Usage:     "(online) get stake info",
+	ArgsUsage: "",
 	Description: `
-get asset balance`,
+get stake information`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: getstakeinfo,
 }
 
-func getbalance(ctx *cli.Context) error {
+func getstakeinfo(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
-	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	info, err := client.GetStakeInfo(context.Background(), blockNr)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(info)
 	return nil
 }

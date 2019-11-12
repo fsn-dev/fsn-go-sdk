@@ -24,36 +24,31 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandGetLatestNotation = cli.Command{
+	Name:      "getlatestnotation",
+	Usage:     "(online) get latest notation",
+	ArgsUsage: "",
 	Description: `
-get asset balance`,
+get latest notation`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: getlatestnotation,
 }
 
-func getbalance(ctx *cli.Context) error {
+func getlatestnotation(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
-	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	notation, err := client.GetLatestNotation(context.Background(), blockNr)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(notation)
 	return nil
 }

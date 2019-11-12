@@ -57,6 +57,11 @@ func GetHexBigIntFromText(whatValue, bigIntStr string) *hexutil.Big {
 	return result
 }
 
+func GetUint64FromText(whatValue, str string) uint64 {
+	big := GetBigIntFromText(whatValue, str)
+	return big.Uint64()
+}
+
 func GetHexUint64(value uint64) *hexutil.Uint64 {
 	result := new(hexutil.Uint64)
 	*(*uint64)(result) = value

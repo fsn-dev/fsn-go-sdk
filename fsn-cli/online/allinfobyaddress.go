@@ -24,36 +24,35 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandAllInfoByAddress = cli.Command{
+	Name:      "allinfobyaddress",
+	Usage:     "(online) get all info by address",
+	ArgsUsage: "<address>",
 	Description: `
-get asset balance`,
+get all info by address`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: allinfobyaddress,
 }
 
-func getbalance(ctx *cli.Context) error {
+func allinfobyaddress(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
+	if len(ctx.Args()) != 1 {
+		cli.ShowCommandHelpAndExit(ctx, "allinfobyaddress", 1)
 	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
+	address := clicommon.GetAddressFromText("address", ctx.Args().First())
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	info, err := client.AllInfoByAddress(context.Background(), address, blockNr)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(info)
 	return nil
 }

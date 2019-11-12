@@ -24,36 +24,35 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandGetSwap = cli.Command{
+	Name:      "getswap",
+	Usage:     "(online) get swap info",
+	ArgsUsage: "<swapID>",
 	Description: `
-get asset balance`,
+get swap information`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: getswap,
 }
 
-func getbalance(ctx *cli.Context) error {
+func getswap(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
+	if len(ctx.Args()) != 1 {
+		cli.ShowCommandHelpAndExit(ctx, "getswap", 1)
 	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
+	swapID := clicommon.GetHashFromText("swapID", ctx.Args().First())
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	swap, err := client.GetSwap(context.Background(), swapID, blockNr)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(swap)
 	return nil
 }

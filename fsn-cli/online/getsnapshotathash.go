@@ -24,36 +24,33 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandGetSnapshotAtHash = cli.Command{
+	Name:      "getsnapshotathash",
+	Usage:     "(online) get snapshot at hash",
+	ArgsUsage: "<blockHash>",
 	Description: `
-get asset balance`,
+get snapshot at hash`,
 	Flags: []cli.Flag{
-		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: getsnapshotathash,
 }
 
-func getbalance(ctx *cli.Context) error {
+func getsnapshotathash(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
+	if len(ctx.Args()) != 1 {
+		cli.ShowCommandHelpAndExit(ctx, "getsnapshotathash", 1)
 	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
-	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	blockHash := clicommon.GetHashFromText("blockHash", ctx.Args().First())
+	snapshot, err := client.GetSnapshotAtHash(context.Background(), blockHash)
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(snapshot)
 	return nil
 }

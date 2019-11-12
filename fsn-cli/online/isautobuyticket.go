@@ -20,40 +20,32 @@ import (
 	"context"
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
-	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandIsAutoBuyTicket = cli.Command{
+	Name:      "isautobuyticket",
+	Usage:     "(online) get is auto buy ticket flag",
+	ArgsUsage: "",
 	Description: `
-get asset balance`,
+get is auto buy ticket flag`,
 	Flags: []cli.Flag{
-		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: isautobuyticket,
 }
 
-func getbalance(ctx *cli.Context) error {
+func isautobuyticket(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
-	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
-	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	flag, err := client.IsAutoBuyTicket(context.Background())
 	if err != nil {
 		return err
 	}
 
-	tools.MustPrintJSON(balance)
+	tools.MustPrintJSON(flag)
 	return nil
 }

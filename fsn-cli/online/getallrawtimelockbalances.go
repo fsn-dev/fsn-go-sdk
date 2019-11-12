@@ -24,32 +24,31 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var CommandGetBalance = cli.Command{
-	Name:      "getbalance",
-	Usage:     "(online) get asset balance",
-	ArgsUsage: "<assetID> <address>",
+var CommandGetAllRawTimeLockBalances = cli.Command{
+	Name:      "getallrawtimelockbalances",
+	Usage:     "(online) get all raw time lock balances",
+	ArgsUsage: "<address>",
 	Description: `
-get asset balance`,
+get all raw time lock balances`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getbalance,
+	Action: getallrawtimelockbalances,
 }
 
-func getbalance(ctx *cli.Context) error {
+func getallrawtimelockbalances(ctx *cli.Context) error {
 	setLogger(ctx)
-	if len(ctx.Args()) != 2 {
-		cli.ShowCommandHelpAndExit(ctx, "getbalance", 1)
+	if len(ctx.Args()) != 1 {
+		cli.ShowCommandHelpAndExit(ctx, "getallrawtimelockbalances", 1)
 	}
 
 	client := dialServer(ctx)
 	defer client.Close()
 
-	assetID := clicommon.GetHashFromText("assetID", ctx.Args().First())
-	address := clicommon.GetAddressFromText("address", ctx.Args().Get(1))
+	address := clicommon.GetAddressFromText("address", ctx.Args().First())
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetBalance(context.Background(), assetID, address, blockNr)
+	balance, err := client.GetAllRawTimeLockBalances(context.Background(), address, blockNr)
 	if err != nil {
 		return err
 	}

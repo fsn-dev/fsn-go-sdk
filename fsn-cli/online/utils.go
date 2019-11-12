@@ -27,7 +27,7 @@ var (
 	serverAddrFlag = cli.StringFlag{
 		Name:  "server",
 		Usage: "server address",
-		Value: "http://localhost:6509",
+		Value: "http://localhost:6508",
 	}
 	blockHeightFlag = cli.StringFlag{
 		Name:  "height",
