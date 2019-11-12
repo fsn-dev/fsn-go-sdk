@@ -98,7 +98,7 @@ func (t *txdata) UnmarshalJSON(input []byte) error {
 	return nil
 }
 
-func (tx *Transaction) MarshalJSONWithSender() ([]byte, error) {
+func (tx *Transaction) MarshalJSONWithSender(indent bool) ([]byte, error) {
 	type txdata struct {
 		Sender       *common.Address `json:"from"`
 		AccountNonce hexutil.Uint64  `json:"nonce"`
@@ -134,5 +134,8 @@ func (tx *Transaction) MarshalJSONWithSender() ([]byte, error) {
 	enc.R = (*hexutil.Big)(t.R)
 	enc.S = (*hexutil.Big)(t.S)
 	enc.Hash = t.Hash
+	if indent {
+		return json.MarshalIndent(&enc, "", "  ")
+	}
 	return json.Marshal(&enc)
 }

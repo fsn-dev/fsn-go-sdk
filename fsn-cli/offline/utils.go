@@ -176,7 +176,7 @@ func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi
 
 func printTx(tx *types.Transaction, json bool) error {
 	if json {
-		bs, err := tx.MarshalJSONWithSender()
+		bs, err := tx.MarshalJSONWithSender(true)
 		if err != nil {
 			return fmt.Errorf("json marshal err %v", err)
 		}
