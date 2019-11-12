@@ -65,6 +65,6 @@ func sendrawtx(ctx *cli.Context) (err error) {
 		return err
 	}
 
-	fmt.Println(tx.Hash())
+	fmt.Println(tx.Hash().String())
 	return nil
 }
