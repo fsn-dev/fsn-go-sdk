@@ -26,7 +26,7 @@ import (
 	"gopkg.in/urfave/cli.v1"
 )
 
-var appVersion = "0.1.0"
+var appVersion = "1.0.0"
 
 var app *cli.App
 
