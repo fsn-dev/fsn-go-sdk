@@ -26,6 +26,7 @@ import (
 
 var CommandTicketPrice = cli.Command{
 	Name:      "ticketprice",
+	Aliases:   []string{"getticketprice"},
 	Usage:     "(online) get ticket price",
 	ArgsUsage: "",
 	Description: `

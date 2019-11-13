@@ -26,10 +26,11 @@ import (
 
 var CommandAllTickets = cli.Command{
 	Name:      "alltickets",
-	Usage:     "(online) get all tikcets info",
-	ArgsUsage: "",
+	Aliases:   []string{"gettickets"},
+	Usage:     "(online) get tikcets",
+	ArgsUsage: "[<address>]",
 	Description: `
-get all tikcets information`,
+get all tikcets, or tickets of a specified address`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
@@ -44,7 +45,23 @@ func alltickets(ctx *cli.Context) error {
 	defer client.Close()
 
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	tickets, err := client.AllTickets(context.Background(), blockNr)
+	argsCount := len(ctx.Args())
+
+	if argsCount == 0 {
+		tickets, err := client.AllTickets(context.Background(), blockNr)
+		if err != nil {
+			return err
+		}
+		tools.MustPrintJSON(tickets)
+		return nil
+	}
+
+	if argsCount != 1 {
+		cli.ShowCommandHelpAndExit(ctx, "alltickets", 1)
+	}
+
+	address := clicommon.GetAddressFromText("address", ctx.Args().First())
+	tickets, err := client.AllTicketsByAddress(context.Background(), address, blockNr)
 	if err != nil {
 		return err
 	}

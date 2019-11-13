@@ -26,7 +26,7 @@ import (
 
 var CommandGetTransactionCount = cli.Command{
 	Name:      "gettransactioncount",
-	Aliases:   []string{"gettxcount", "getnonce"},
+	Aliases:   []string{"getnonce"},
 	Usage:     "(online) get transaction count",
 	ArgsUsage: "<address>",
 	Description: `

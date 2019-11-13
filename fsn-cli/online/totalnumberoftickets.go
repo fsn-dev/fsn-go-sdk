@@ -27,10 +27,10 @@ import (
 var CommandTotalNumberOfTickets = cli.Command{
 	Name:      "totalnumberoftickets",
 	Aliases:   []string{"totaltickets"},
-	Usage:     "(online) get total number of tickets",
-	ArgsUsage: "",
+	Usage:     "(online) get number of tickets",
+	ArgsUsage: "[<address>...]",
 	Description: `
-get total number of tickets`,
+get total number of tickets, or number of tickets of specified addresses`,
 	Flags: []cli.Flag{
 		blockHeightFlag,
 		serverAddrFlag,
@@ -45,11 +45,26 @@ func totalnumberoftickets(ctx *cli.Context) error {
 	defer client.Close()
 
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	number, err := client.TotalNumberOfTickets(context.Background(), blockNr)
-	if err != nil {
-		return err
+	argsCount := len(ctx.Args())
+	result := make(map[string]*interface{}, argsCount+1)
+
+	if argsCount == 0 {
+		number, err := client.TotalNumberOfTickets(context.Background(), blockNr)
+		if err != nil {
+			return err
+		}
+		result["all"] = number
 	}
 
-	tools.MustPrintJSON(number)
+	for i := 0; i < argsCount; i++ {
+		address := clicommon.GetAddressFromText("address", ctx.Args().Get(i))
+		number, err := client.TotalNumberOfTicketsByAddress(context.Background(), address, blockNr)
+		if err != nil {
+			continue
+		}
+		result[address.String()] = number
+	}
+
+	tools.MustPrintJSON(result)
 	return nil
 }
