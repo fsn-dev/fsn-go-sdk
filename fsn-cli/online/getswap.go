@@ -18,6 +18,7 @@ package online
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
@@ -31,6 +32,7 @@ var CommandGetSwap = cli.Command{
 	Description: `
 get swap information`,
 	Flags: []cli.Flag{
+		multiSwapFlag,
 		blockHeightFlag,
 		serverAddrFlag,
 	},
@@ -46,13 +48,39 @@ func getswap(ctx *cli.Context) error {
 	client := dialServer(ctx)
 	defer client.Close()
 
-	swapID := clicommon.GetHashFromText("swapID", ctx.Args().First())
-	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	swap, err := client.GetSwap(context.Background(), swapID, blockNr)
-	if err != nil {
-		return err
+	onlySingleSwap := false
+	onlyMultiSwap := false
+	if ctx.IsSet(multiSwapFlag.Name) {
+		if ctx.Bool(multiSwapFlag.Name) {
+			onlyMultiSwap = true
+		} else {
+			onlySingleSwap = true
+		}
 	}
 
-	tools.MustPrintJSON(swap)
-	return nil
+	swapID := clicommon.GetHashFromText("swapID", ctx.Args().First())
+	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
+
+	if !onlyMultiSwap {
+		swap, err := client.GetSwap(context.Background(), swapID, blockNr)
+		if err == nil {
+			tools.MustPrintJSON(swap)
+			return nil
+		} else if onlySingleSwap {
+			return err
+		}
+	}
+
+	if !onlySingleSwap {
+		swap, err := client.GetMultiSwap(context.Background(), swapID, blockNr)
+		if err == nil {
+			tools.MustPrintJSON(swap)
+			return nil
+		} else if onlyMultiSwap {
+			return err
+		}
+
+	}
+
+	return fmt.Errorf("Swap not found")
 }

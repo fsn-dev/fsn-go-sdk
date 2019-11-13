@@ -34,6 +34,10 @@ var (
 		Usage: "block height",
 		Value: "latest",
 	}
+	multiSwapFlag = cli.BoolFlag{
+		Name:  "multi",
+		Usage: "multi-swap bool flag",
+	}
 )
 
 func dialServer(ctx *cli.Context) *ethclient.Client {
