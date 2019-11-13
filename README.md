@@ -11,7 +11,7 @@
 
 2. add vendor packages
 
-    make vendor
+    make vendor  
     or, make vendor_with_proxy (set goproxy if you can't get packages from golang.org)
 
 3. build project
