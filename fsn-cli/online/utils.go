@@ -38,6 +38,10 @@ var (
 		Name:  "multi",
 		Usage: "multi-swap bool flag",
 	}
+	rawTimeLockFlag = cli.BoolFlag{
+		Name:  "raw",
+		Usage: "show time lock in raw mode",
+	}
 )
 
 func dialServer(ctx *cli.Context) *ethclient.Client {

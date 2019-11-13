@@ -68,8 +68,6 @@ func init() {
 		online.CommandGetAllBalances,
 		online.CommandGetTimeLockBalance,
 		online.CommandGetAllTimeLockBalances,
-		online.CommandGetRawTimeLockBalance,
-		online.CommandGetAllRawTimeLockBalances,
 		online.CommandIsAutoBuyTicket,
 		online.CommandTicketPrice,
 		online.CommandTotalNumberOfTickets,

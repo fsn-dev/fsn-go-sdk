@@ -32,6 +32,7 @@ var CommandGetAllTimeLockBalances = cli.Command{
 	Description: `
 get all time lock balances`,
 	Flags: []cli.Flag{
+		rawTimeLockFlag,
 		blockHeightFlag,
 		serverAddrFlag,
 	},
@@ -49,7 +50,14 @@ func getalltimelockbalances(ctx *cli.Context) error {
 
 	address := clicommon.GetAddressFromText("address", ctx.Args().First())
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
-	balance, err := client.GetAllTimeLockBalances(context.Background(), address, blockNr)
+
+	var balance *interface{}
+	var err error
+	if ctx.Bool(rawTimeLockFlag.Name) {
+		balance, err = client.GetAllRawTimeLockBalances(context.Background(), address, blockNr)
+	} else {
+		balance, err = client.GetAllTimeLockBalances(context.Background(), address, blockNr)
+	}
 	if err != nil {
 		return err
 	}
