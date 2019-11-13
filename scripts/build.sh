@@ -43,6 +43,7 @@ if [[ ! -d vendor ]]; then
     exit
 fi
 
+export GO111MODULE=on
 ignored_dirs="bin efsn scripts vendor fsnapi"
 for project in "$@"; do
     project=$(echo $project | sed 's#/*$##')
