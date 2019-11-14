@@ -1,0 +1,138 @@
+# Date: 2019-11-14T15-43-29
+# Version: 1.0.0
+#
+# fsn-cli bash completion
+# please put fsn-cli to /usr/local/bin/ directory
+# please source this-file in your .bashrc
+
+COMMAND="fsn-cli"
+
+getoptions() {
+    command -v $COMMAND >/dev/null 2>&1 &&
+    $COMMAND "$@" --help | grep -o "\-\-[0-9a-zA-Z_-]*" | xargs
+}
+
+command -v $COMMAND >/dev/null 2>&1 &&
+_fsn-cli()
+{
+    local cur prev words cword
+    _get_comp_words_by_ref cur prev words cword
+
+    COMPREPLY=()
+
+    # Skip past - and + options to find the command.
+    local nwords=${#words[@]}
+    local cmd_i cmd dd_i
+    for (( cmd_i=1; cmd_i<$nwords; cmd_i++ ));
+    do
+        if [[ ! "${words[$cmd_i]}" =~ ^[+-] ]]; then
+            cmd="${words[$cmd_i]}"
+            break
+        fi
+    done
+    # Find the location of the -- separator.
+    for (( dd_i=1; dd_i<$nwords-1; dd_i++ ));
+    do
+        if [[ "${words[$dd_i]}" = "--" ]]; then
+            break
+        fi
+    done
+
+    local opt__signrawtx=$(getoptions signrawtx)
+    local opt__signtx=$opt__signrawtx
+    local opt__decoderawtx=$(getoptions decoderawtx)
+    local opt__decodetx=$opt__decoderawtx
+    local opt__genasset=$(getoptions genasset)
+    local opt__sendasset=$(getoptions sendasset)
+    local opt__decasset=$(getoptions decasset)
+    local opt__incasset=$(getoptions incasset)
+    local opt__buyticket=$(getoptions buyticket)
+    local opt__gennotaion=$(getoptions gennotaion)
+    local opt__asset2timelock=$(getoptions asset2timelock)
+    local opt__a2t=$opt__asset2timelock
+    local opt__timelock2asset=$(getoptions timelock2asset)
+    local opt__t2a=$opt__timelock2asset
+    local opt__timelock2timelock=$(getoptions timelock2timelock)
+    local opt__t2t=$opt__timelock2timelock
+    local opt__makeswap=$(getoptions makeswap)
+    local opt__takeswap=$(getoptions takeswap)
+    local opt__recallswap=$(getoptions recallswap)
+    local opt__makemultiswap=$(getoptions makemultiswap)
+    local opt__makemswap=$opt__makemultiswap
+    local opt__takemultiswap=$(getoptions takemultiswap)
+    local opt__takemswap=$opt__takemultiswap
+    local opt__recallmultiswap=$(getoptions recallmultiswap)
+    local opt__recallmswap=$opt__recallmultiswap
+    local opt__getblock=$(getoptions getblock)
+    local opt__gettransaction=$(getoptions gettransaction)
+    local opt__gettx=$opt__gettransaction
+    local opt__gettransactionreceipt=$(getoptions gettransactionreceipt)
+    local opt__getreceipt=$opt__gettransactionreceipt
+    local opt__gettransactionandreceipt=$(getoptions gettransactionandreceipt)
+    local opt__gettxandr=$opt__gettransactionandreceipt
+    local opt__gettransactioncount=$(getoptions gettransactioncount)
+    local opt__getnonce=$opt__gettransactioncount
+    local opt__getsnapshot=$(getoptions getsnapshot)
+    local opt__getsnap=$opt__getsnapshot
+    local opt__getsnapshotathash=$(getoptions getsnapshotathash)
+    local opt__getsnapat=$opt__getsnapshotathash
+    local opt__sendrawtx=$(getoptions sendrawtx)
+    local opt__getasset=$(getoptions getasset)
+    local opt__getswap=$(getoptions getswap)
+    local opt__getnotation=$(getoptions getnotation)
+    local opt__getlatestnotation=$(getoptions getlatestnotation)
+    local opt__getaddressbynotation=$(getoptions getaddressbynotation)
+    local opt__getbalance=$(getoptions getbalance)
+    local opt__getallbalances=$(getoptions getallbalances)
+    local opt__gettimelockbalance=$(getoptions gettimelockbalance)
+    local opt__gettlb=$opt__gettimelockbalance
+    local opt__getalltimelockbalances=$(getoptions getalltimelockbalances)
+    local opt__getalltlb=$opt__getalltimelockbalances
+    local opt__isautobuyticket=$(getoptions isautobuyticket)
+    local opt__isautobt=$opt__isautobuyticket
+    local opt__ticketprice=$(getoptions ticketprice)
+    local opt__getticketprice=$opt__ticketprice
+    local opt__totalnumberoftickets=$(getoptions totalnumberoftickets)
+    local opt__totaltickets=$opt__totalnumberoftickets
+    local opt__alltickets=$(getoptions alltickets)
+    local opt__gettickets=$opt__alltickets
+    local opt__allinfobyaddress=$(getoptions allinfobyaddress)
+    local opt__allinfo=$opt__allinfobyaddress
+    local opt__getstakeinfo=$(getoptions getstakeinfo)
+    local opt__getstake=$opt__getstakeinfo
+    local opt__getblockreward=$(getoptions getblockreward)
+    local opt__getreward=$opt__getblockreward
+
+    if [[ $cword -gt $dd_i ]]; then
+        # Completion after -- separator.
+        # Fallback to filename completion
+        _filedir
+    elif [[ $cword -le $cmd_i ]]; then
+        # Completion before or at the command.
+        COMPREPLY=( $( compgen -W "$__cli_commands" -- "$cur" ) )
+    else
+        case "${prev}" in
+            help)
+                COMPREPLY=( $( compgen -W "$__cli_commands" -- "$cur" ) )
+                ;;
+            *)
+                local opt_var=opt__${cmd//-/_}
+                if [[ -z "${!opt_var}" ]]; then
+                    # Fallback to filename completion.
+                    _filedir
+                else
+                    COMPREPLY=( $( compgen -W "${!opt_var}" -- "$cur" ) )
+                fi
+                ;;
+        esac
+    fi
+
+    return 0
+} &&
+complete -F _fsn-cli fsn-cli
+
+command -v $COMMAND >/dev/null 2>&1 &&
+__cli_commands=$($COMMAND | sed -n '/COMMANDS:/,/GLOBAL OPTIONS:/p' | grep -vE "(COMMANDS:|GLOBAL OPTIONS:|help, h|^$)" | awk -F\( '{print $1}' | sed 's/\s*//g' | sed 's/,/\n/g')
+
+
+#/* vim: set ts=4 sts=4 sw=4 et : */
