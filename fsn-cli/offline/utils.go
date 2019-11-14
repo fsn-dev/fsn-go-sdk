@@ -61,8 +61,7 @@ var (
 		Value: "",
 	}
 
-	commonFlags = []cli.Flag{
-		signFlag,
+	signTxFlags = []cli.Flag{
 		senderFlag,
 		accountNonceFlag,
 		gasLimitFlag,
@@ -70,6 +69,8 @@ var (
 		keyStoreFileFlag,
 		utils.PasswordFileFlag,
 	}
+
+	commonFlags = append([]cli.Flag{signFlag}, signTxFlags...)
 )
 
 func setLogger(ctx *cli.Context) {
@@ -137,6 +138,14 @@ func getHexUint64Slice(ctx *cli.Context, flagName string) []*hexutil.Uint64 {
 }
 
 func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi.SignOptions) {
+	return getBaseArgsAndSignOptionsImpl(ctx, false)
+}
+
+func getBaseArgsAndSignOptionsForSign(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi.SignOptions) {
+	return getBaseArgsAndSignOptionsImpl(ctx, true)
+}
+
+func getBaseArgsAndSignOptionsImpl(ctx *cli.Context, forceSign bool) (common.FusionBaseArgs, *fsnapi.SignOptions) {
 	var (
 		args     common.FusionBaseArgs
 		signopts *fsnapi.SignOptions
@@ -156,7 +165,7 @@ func getBaseArgsAndSignOptions(ctx *cli.Context) (common.FusionBaseArgs, *fsnapi
 	args.Gas = getHexUint64(ctx, gasLimitFlag.Name)
 	args.GasPrice = getHexBigInt(ctx, gasPriceFlag.Name)
 
-	if ctx.Bool(signFlag.Name) {
+	if forceSign || ctx.Bool(signFlag.Name) {
 		signopts = &fsnapi.SignOptions{}
 		signopts.Signer = from
 		signopts.Keyfile = ctx.String(keyStoreFileFlag.Name)

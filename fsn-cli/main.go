@@ -34,6 +34,7 @@ func init() {
 	app = utils.NewApp(appVersion, "Fusion blockchain client")
 	app.Commands = []cli.Command{
 		// offline commands
+		offline.CommandSignRawTx,
 		offline.CommandDecodeRawTx,
 		offline.CommandGenAsset,
 		offline.CommandSendAsset,
