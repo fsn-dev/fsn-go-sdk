@@ -46,7 +46,7 @@ func totalnumberoftickets(ctx *cli.Context) error {
 
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
 	argsCount := len(ctx.Args())
-	result := make(map[string]*interface{}, argsCount+1)
+	result := make(map[string]interface{}, argsCount+1)
 
 	if argsCount == 0 {
 		number, err := client.TotalNumberOfTickets(context.Background(), blockNr)

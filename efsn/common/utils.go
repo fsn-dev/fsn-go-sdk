@@ -3,6 +3,7 @@ package common
 import (
 	"encoding/hex"
 	"fmt"
+	"math/big"
 	"reflect"
 	"time"
 )
@@ -112,4 +113,20 @@ func MaxUint64(x, y uint64) uint64 {
 		return y
 	}
 	return x
+}
+
+func GetBigInt(str string) *big.Int {
+	bi, ok := new(big.Int).SetString(str, 0)
+	if ok {
+		return bi
+	}
+	return nil
+}
+
+func GetBigInts(strs []string) []*big.Int {
+	res := make([]*big.Int, len(strs))
+	for i, str := range strs {
+		res[i] = GetBigInt(str)
+	}
+	return res
 }

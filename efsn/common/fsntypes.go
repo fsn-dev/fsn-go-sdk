@@ -277,3 +277,26 @@ type KeyValue struct {
 func NewKeyValue(name string, v interface{}) *KeyValue {
 	return &KeyValue{Key: name, Value: v}
 }
+
+// for getStakeInfo
+type Summary struct {
+	TotalMiners  uint64 `json:"totalMiners"`
+	TotalTickets uint64 `json:"totalTickets"`
+}
+type Stake struct {
+	Owner   Address `json:"owner"`
+	Tickets uint64  `json:"tickets"`
+}
+type StakeSlice []Stake
+type StakeInfo struct {
+	StakeInfo StakeSlice `json:"stakeInfo"`
+	Summary   Summary    `json:"summary"`
+}
+
+// for allInfoByAddress
+type AllInfoForAddress struct {
+	Tickets   map[Hash]TicketDisplay `json:"tickets"`
+	Balances  map[Hash]*big.Int      `json:"balances"`
+	Timelocks map[Hash]*TimeLock     `json:"timeLockBalances"`
+	Notation  uint64                 `json:"notation"`
+}

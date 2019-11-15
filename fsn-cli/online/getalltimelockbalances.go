@@ -51,7 +51,7 @@ func getalltimelockbalances(ctx *cli.Context) error {
 	address := clicommon.GetAddressFromText("address", ctx.Args().First())
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
 
-	var balance *interface{}
+	var balance interface{}
 	var err error
 	if ctx.Bool(rawTimeLockFlag.Name) {
 		balance, err = client.GetAllRawTimeLockBalances(context.Background(), address, blockNr)
