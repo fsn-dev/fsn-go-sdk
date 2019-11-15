@@ -87,9 +87,11 @@ func syncAll(ctx *cli.Context) error {
 	end := ctx.Uint64(endFlag.Name)
 	overwrite := ctx.Bool(overwriteFlag.Name)
 	jobs := ctx.GlobalUint64(jobsFlag.Name)
+	interval := ctx.GlobalUint64(intervalFlag.Name)
 
 	syncer.ServerURL = serverAddress
 	syncer.Overwrite = overwrite
+	syncer.BlockInterval = interval
 	syncer.SetJobCount(jobs)
 	syncer.InitMongoServer(mongoURL, dbName)
 	syncer.NewSyncer(stable, start, end).Sync()

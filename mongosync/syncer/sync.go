@@ -31,15 +31,16 @@ import (
 )
 
 var (
-	ServerURL string
-	Overwrite bool
-	JobCount  uint64
+	ServerURL     string
+	Overwrite     bool
+	JobCount      uint64 = 10
+	BlockInterval uint64 = 100
 
 	minJobs       uint64 = 1
 	maxJobs       uint64 = 1000
 	minWorkBlocks uint64 = 100
 
-	messageChanSize = 1000
+	messageChanSize = 100
 
 	retryDuration = time.Duration(1) * time.Second
 	waitDuration  = time.Duration((averageBlockTime+1)/2) * time.Second
@@ -293,6 +294,13 @@ func getSynced(mbs []*mongodb.MgoBlock, num uint64) *mongodb.MgoBlock {
 	return nil
 }
 
+func (w *Worker) calcSyncPercentage(height uint64) float64 {
+	if w.end <= w.start {
+		return 100
+	}
+	return 100 * float64(height-w.start) / float64(w.end-w.start)
+}
+
 func (w *Worker) syncRange(start, end uint64) {
 	step := uint64(10000)
 	height := start
@@ -340,8 +348,8 @@ func (w *Worker) syncRange(start, end uint64) {
 				w.Parse(block, receipts)
 				if w.end == 0 {
 					log.Info("sync block completed", "id", w.id, "number", height)
-				} else if height%1000 == 0 {
-					log.Info("syncRange in process", "id", w.id, "number", height)
+				} else if height%BlockInterval == 0 {
+					log.Info("syncRange in process", "id", w.id, "number", height, "percentage", w.calcSyncPercentage(height))
 				}
 			}
 			height += 1
@@ -440,7 +448,7 @@ func (s *Syncer) UpdateBlockInfo(wg *sync.WaitGroup) {
 				if err == nil {
 					if height > last {
 						log.Info("update block completed", "number", height, "timestamp", timestamp, "td", totalDifficulty)
-					} else if height%1000 == 0 {
+					} else if height%BlockInterval == 0 {
 						log.Info("update block in process", "number", height, "timestamp", timestamp, "td", totalDifficulty)
 					}
 					td = totalDifficulty

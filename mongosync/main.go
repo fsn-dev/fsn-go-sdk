@@ -33,7 +33,12 @@ func init() {
 	app.Commands = []cli.Command{
 		commandSyncAll,
 	}
-	app.Flags = append(app.Flags, jobsFlag, utils.VerbosityFlag, utils.JsonFlag)
+	app.Flags = append(app.Flags,
+		jobsFlag,
+		intervalFlag,
+		utils.VerbosityFlag,
+		utils.JsonFlag,
+	)
 }
 
 var (
@@ -41,6 +46,11 @@ var (
 		Name:  "jobs",
 		Usage: "number of jobs (1-1000)",
 		Value: 10,
+	}
+	intervalFlag = cli.Uint64Flag{
+		Name:  "interval",
+		Usage: "interval of blocks to show sync progress",
+		Value: 100,
 	}
 )
 

@@ -12,7 +12,7 @@ and also support query balance or other chain status onlinely through RPC callin
 ./bin/fsn-cli buyticket --help # get command help info
 ```
 Note:  
-> you can copy fsn-cli to /usr/local/bin, and  
+> you can copy ./bin/fsn-cli to /usr/local/bin, and  
 > `source ./scripts/fsn-cli.completion` to add bash  completion function.
 
 ## For developers
