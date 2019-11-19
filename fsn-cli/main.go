@@ -21,6 +21,7 @@ import (
 	"os"
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/extensions"
 	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/offline"
 	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/online"
 	"gopkg.in/urfave/cli.v1"
@@ -76,6 +77,8 @@ func init() {
 		online.CommandAllInfoByAddress,
 		online.CommandGetStakeInfo,
 		online.CommandGetBlockReward,
+		// extensions
+		extensions.CommandCmpTimeLockBalance,
 	}
 	app.Flags = append(app.Flags, utils.VerbosityFlag)
 }
