@@ -31,6 +31,7 @@ type SignOptions struct {
 	Signer   common.Address
 	Keyfile  string
 	Passfile string
+	Password string
 	ChainID  uint64
 }
 
@@ -40,12 +41,15 @@ func SignTx(tx *types.Transaction, signOptions *SignOptions) (*types.Transaction
 		return nil, err
 	}
 
-	passdata, err := ioutil.ReadFile(signOptions.Passfile)
-	if err != nil {
-		return nil, err
+	passphrase := signOptions.Password
+	if passphrase == "" && signOptions.Passfile != "" {
+		passdata, err := ioutil.ReadFile(signOptions.Passfile)
+		if err != nil {
+			return nil, err
+		}
+		passphrase = strings.TrimSpace(string(passdata))
 	}
 
-	passphrase := strings.TrimSpace(string(passdata))
 	key, err := keystore.DecryptKey(keyjson, passphrase)
 	if err != nil {
 		return nil, err

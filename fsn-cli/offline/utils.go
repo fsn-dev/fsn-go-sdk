@@ -25,6 +25,7 @@ import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
 	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
 	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
@@ -37,13 +38,11 @@ var (
 	}
 	senderFlag = cli.StringFlag{
 		Name:  "from",
-		Usage: "transaction sender",
-		Value: "",
+		Usage: "transaction sender (required)",
 	}
 	accountNonceFlag = cli.Uint64Flag{
 		Name:  "nonce",
-		Usage: "set account nonce",
-		Value: 0,
+		Usage: "set account nonce (required)",
 	}
 	gasLimitFlag = cli.Uint64Flag{
 		Name:  "gaslimit",
@@ -57,8 +56,7 @@ var (
 	}
 	keyStoreFileFlag = cli.StringFlag{
 		Name:  "keystore",
-		Usage: "keystore file to use for signing transaction",
-		Value: "",
+		Usage: "keystore file to use for signing transaction (required)",
 	}
 	chainIdFlag = cli.Uint64Flag{
 		Name:  "chainid",
@@ -175,13 +173,20 @@ func getBaseArgsAndSignOptionsImpl(ctx *cli.Context, forceSign bool) (common.Fus
 		signopts = &fsnapi.SignOptions{}
 		signopts.Signer = from
 		signopts.Keyfile = ctx.String(keyStoreFileFlag.Name)
-		signopts.Passfile = ctx.String(utils.PasswordFileFlag.Name)
 		signopts.ChainID = ctx.Uint64(chainIdFlag.Name)
 		if args.From == (common.Address{}) ||
 			args.Nonce == nil ||
-			signopts.Keyfile == "" ||
-			signopts.Passfile == "" {
-			utils.Fatalf("Must provide (--%s --%s --%s --%s) options to sign transaction", senderFlag.Name, accountNonceFlag.Name, keyStoreFileFlag.Name, utils.PasswordFileFlag.Name)
+			signopts.Keyfile == "" {
+			utils.Fatalf("Must provide (--%s --%s --%s) options to sign transaction", senderFlag.Name, accountNonceFlag.Name, keyStoreFileFlag.Name)
+		}
+		if ctx.IsSet(utils.PasswordFileFlag.Name) {
+			signopts.Passfile = ctx.String(utils.PasswordFileFlag.Name)
+		} else {
+			password, err := tools.Stdin.PromptPassword("Passphrase: ")
+			if err != nil {
+				utils.Fatalf("Failed to read passphrase: %v", err)
+			}
+			signopts.Password = password
 		}
 	}
 
