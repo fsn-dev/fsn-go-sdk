@@ -7,6 +7,7 @@ require (
 	github.com/btcsuite/btcd v0.20.0-beta
 	github.com/deckarep/golang-set v1.7.1
 	github.com/fatih/color v1.7.0
+	github.com/gorilla/websocket v1.4.1
 	github.com/inconshreveable/log15 v0.0.0-20180818164646-67afb5ed74ec
 	github.com/mattn/go-colorable v0.1.4
 	github.com/pborman/uuid v1.2.0
@@ -15,7 +16,7 @@ require (
 	github.com/robertkrimen/otto v0.0.0-20180617131154-15f95af6e78d
 	github.com/rs/cors v1.7.0
 	golang.org/x/crypto v0.0.0-20191112222119-e1110fd1c708
-	golang.org/x/net v0.0.0-20191112182307-2180aed22343
+	golang.org/x/net v0.0.0-20191112182307-2180aed22343 // indirect
 	golang.org/x/sys v0.0.0-20191112214154-59a1497f0cea
 	golang.org/x/tools v0.0.0-20191112232237-76a3b8da50ef
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
