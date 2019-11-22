@@ -46,6 +46,9 @@ var (
 
 func dialServer(ctx *cli.Context) *ethclient.Client {
 	serverAddr := ctx.String(serverAddrFlag.Name)
+	if serverAddr == "" {
+		utils.Fatalf("must specify '%s' option or set '%s' enviroment", serverAddrFlag.Name, serverAddrFlag.EnvVar)
+	}
 	client, err := ethclient.Dial(serverAddr)
 	if err != nil {
 		utils.Fatalf("dial server %s err %v", serverAddr, err)

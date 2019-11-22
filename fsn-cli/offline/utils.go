@@ -55,8 +55,9 @@ var (
 		Value: "1000000000",
 	}
 	keyStoreFileFlag = cli.StringFlag{
-		Name:  "keystore",
-		Usage: "keystore file to use for signing transaction (required)",
+		Name:   "keystore",
+		Usage:  "keystore file to use for signing transaction",
+		EnvVar: "FSN_KEYSTORE_FILE",
 	}
 	chainIdFlag = cli.Uint64Flag{
 		Name:  "chainid",
@@ -174,10 +175,11 @@ func getBaseArgsAndSignOptionsImpl(ctx *cli.Context, forceSign bool) (common.Fus
 		signopts.Signer = from
 		signopts.Keyfile = ctx.String(keyStoreFileFlag.Name)
 		signopts.ChainID = ctx.Uint64(chainIdFlag.Name)
-		if args.From == (common.Address{}) ||
-			args.Nonce == nil ||
-			signopts.Keyfile == "" {
-			utils.Fatalf("Must provide (--%s --%s --%s) options to sign transaction", senderFlag.Name, accountNonceFlag.Name, keyStoreFileFlag.Name)
+		if signopts.Keyfile == "" {
+			utils.Fatalf("must specify '%s' option or set '%s' enviroment", keyStoreFileFlag.Name, keyStoreFileFlag.EnvVar)
+		}
+		if args.From == (common.Address{}) || args.Nonce == nil {
+			utils.Fatalf("Must provide ('%s', '%s') options to sign transaction", senderFlag.Name, accountNonceFlag.Name)
 		}
 		if ctx.IsSet(utils.PasswordFileFlag.Name) {
 			signopts.Passfile = ctx.String(utils.PasswordFileFlag.Name)
