@@ -25,9 +25,9 @@ import (
 
 var (
 	serverAddrFlag = cli.StringFlag{
-		Name:  "server",
-		Usage: "server address",
-		Value: "http://localhost:6508",
+		Name:   "server",
+		Usage:  "server address",
+		EnvVar: "FSN_SERVER",
 	}
 	blockHeightFlag = cli.StringFlag{
 		Name:  "height",

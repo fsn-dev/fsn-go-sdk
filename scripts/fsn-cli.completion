@@ -102,6 +102,8 @@ _fsn-cli()
     local opt__getstake=$opt__getstakeinfo
     local opt__getblockreward=$(getoptions getblockreward)
     local opt__getreward=$opt__getblockreward
+    local opt__cmptimelockbalance=$(getoptions cmptimelockbalance)
+    local opt__cmptlb=$opt__cmptimelockbalance
 
     if [[ $cword -gt $dd_i ]]; then
         # Completion after -- separator.
