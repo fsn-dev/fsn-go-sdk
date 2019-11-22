@@ -60,6 +60,11 @@ var (
 		Usage: "keystore file to use for signing transaction",
 		Value: "",
 	}
+	chainIdFlag = cli.Uint64Flag{
+		Name:  "chainid",
+		Usage: "chain identifier (integer, 32659=mainnet, 46688=testnet, 55555=devnet)",
+		Value: 32659,
+	}
 
 	signTxFlags = []cli.Flag{
 		senderFlag,
@@ -68,6 +73,7 @@ var (
 		gasPriceFlag,
 		keyStoreFileFlag,
 		utils.PasswordFileFlag,
+		chainIdFlag,
 	}
 
 	commonFlags = append([]cli.Flag{signFlag}, signTxFlags...)
@@ -170,6 +176,7 @@ func getBaseArgsAndSignOptionsImpl(ctx *cli.Context, forceSign bool) (common.Fus
 		signopts.Signer = from
 		signopts.Keyfile = ctx.String(keyStoreFileFlag.Name)
 		signopts.Passfile = ctx.String(utils.PasswordFileFlag.Name)
+		signopts.ChainID = ctx.Uint64(chainIdFlag.Name)
 		if args.From == (common.Address{}) ||
 			args.Nonce == nil ||
 			signopts.Keyfile == "" ||

@@ -19,18 +19,19 @@ package fsnapi
 import (
 	"fmt"
 	"io/ioutil"
+	"math/big"
 	"strings"
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/keystore"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/params"
 )
 
 type SignOptions struct {
 	Signer   common.Address
 	Keyfile  string
 	Passfile string
+	ChainID  uint64
 }
 
 func SignTx(tx *types.Transaction, signOptions *SignOptions) (*types.Transaction, error) {
@@ -54,6 +55,7 @@ func SignTx(tx *types.Transaction, signOptions *SignOptions) (*types.Transaction
 		return nil, fmt.Errorf("key content mismatch: have account %x, want %x", key.Address, signOptions.Signer)
 	}
 
-	signer := types.NewEIP155Signer(params.MainnetChainConfig.ChainID)
+	chainID := new(big.Int).SetUint64(signOptions.ChainID)
+	signer := types.NewEIP155Signer(chainID)
 	return types.SignTx(tx, signer, key.PrivateKey)
 }
