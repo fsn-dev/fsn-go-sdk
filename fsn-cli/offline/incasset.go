@@ -26,7 +26,8 @@ import (
 
 var CommandIncAsset = cli.Command{
 	Name:      "incasset",
-	Usage:     "(offline) build increase asset raw transaction",
+	Category:  "offline",
+	Usage:     "build increase asset raw transaction",
 	ArgsUsage: "<assetId> <to> <value>",
 	Description: `
 build increase asset raw transaction`,

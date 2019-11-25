@@ -26,7 +26,8 @@ import (
 var CommandIsAutoBuyTicket = cli.Command{
 	Name:      "isautobuyticket",
 	Aliases:   []string{"isautobt"},
-	Usage:     "(online) get is auto buy ticket flag",
+	Category:  "online",
+	Usage:     "get is auto buy ticket flag",
 	ArgsUsage: "",
 	Description: `
 get is auto buy ticket flag`,

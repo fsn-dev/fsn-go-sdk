@@ -26,7 +26,8 @@ import (
 
 var CommandDecAsset = cli.Command{
 	Name:      "decasset",
-	Usage:     "(offline) build decrease asset raw transaction",
+	Category:  "offline",
+	Usage:     "build decrease asset raw transaction",
 	ArgsUsage: "<assetId> <to> <value>",
 	Description: `
 build decrease asset raw transaction`,

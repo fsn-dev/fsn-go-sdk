@@ -27,7 +27,8 @@ import (
 var CommandAllInfoByAddress = cli.Command{
 	Name:      "allinfobyaddress",
 	Aliases:   []string{"allinfo"},
-	Usage:     "(online) get all info by address",
+	Category:  "online",
+	Usage:     "get all info by address",
 	ArgsUsage: "<address>",
 	Description: `
 get all info by address`,

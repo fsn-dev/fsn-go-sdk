@@ -28,7 +28,8 @@ import (
 
 var CommandGetBlock = cli.Command{
 	Name:      "getblock",
-	Usage:     "(online) get block by hash or number",
+	Category:  "online",
+	Usage:     "get block by hash or number",
 	ArgsUsage: "<hash_or_number>",
 	Description: `
 get block by hash or number`,

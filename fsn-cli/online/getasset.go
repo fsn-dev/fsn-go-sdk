@@ -26,7 +26,8 @@ import (
 
 var CommandGetAsset = cli.Command{
 	Name:      "getasset",
-	Usage:     "(online) get asset info",
+	Category:  "online",
+	Usage:     "get asset info",
 	ArgsUsage: "<assetID>",
 	Description: `
 get asset information`,

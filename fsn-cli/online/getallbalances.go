@@ -26,7 +26,8 @@ import (
 
 var CommandGetAllBalances = cli.Command{
 	Name:      "getallbalances",
-	Usage:     "(online) get all assets balances",
+	Category:  "online",
+	Usage:     "get all assets balances",
 	ArgsUsage: "<address>",
 	Description: `
 get all assets balances`,

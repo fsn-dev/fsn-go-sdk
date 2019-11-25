@@ -31,7 +31,8 @@ import (
 var CommandCmpTimeLockBalance = cli.Command{
 	Name:      "cmptimelockbalance",
 	Aliases:   []string{"cmptlb"},
-	Usage:     "(online) cmp time lock balance",
+	Category:  "online-extensions",
+	Usage:     "cmp time lock balance",
 	ArgsUsage: "<assetID> <address> <value>",
 	Description: `
 cmp time lock balance`,

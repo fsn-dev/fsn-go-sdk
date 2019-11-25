@@ -27,7 +27,8 @@ import (
 
 var CommandGetSwap = cli.Command{
 	Name:      "getswap",
-	Usage:     "(online) get swap info",
+	Category:  "online",
+	Usage:     "get swap info",
 	ArgsUsage: "<swapID>",
 	Description: `
 get swap information`,

@@ -29,7 +29,8 @@ import (
 
 var CommandSendRawTx = cli.Command{
 	Name:      "sendrawtx",
-	Usage:     "(online) send raw transaction",
+	Category:  "online",
+	Usage:     "send raw transaction",
 	ArgsUsage: "<rawtx>",
 	Description: `
 broadcast offline signed raw transaction (hex encoded)`,

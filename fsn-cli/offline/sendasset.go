@@ -26,7 +26,8 @@ import (
 
 var CommandSendAsset = cli.Command{
 	Name:      "sendasset",
-	Usage:     "(offline) build send asset raw transaction",
+	Category:  "offline",
+	Usage:     "build send asset raw transaction",
 	ArgsUsage: "<assetID> <to> <value>",
 	Description: `
 build send asset raw transaction`,

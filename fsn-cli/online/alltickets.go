@@ -27,7 +27,8 @@ import (
 var CommandAllTickets = cli.Command{
 	Name:      "alltickets",
 	Aliases:   []string{"gettickets"},
-	Usage:     "(online) get tikcets",
+	Category:  "online",
+	Usage:     "get tikcets",
 	ArgsUsage: "[<address>]",
 	Description: `
 get all tikcets, or tickets of a specified address`,

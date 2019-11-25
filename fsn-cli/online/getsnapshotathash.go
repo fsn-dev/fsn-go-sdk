@@ -27,7 +27,8 @@ import (
 var CommandGetSnapshotAtHash = cli.Command{
 	Name:      "getsnapshotathash",
 	Aliases:   []string{"getsnapat"},
-	Usage:     "(online) get snapshot at hash",
+	Category:  "online",
+	Usage:     "get snapshot at hash",
 	ArgsUsage: "<blockHash>",
 	Description: `
 get snapshot at hash`,

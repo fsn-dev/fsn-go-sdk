@@ -26,7 +26,8 @@ import (
 
 var CommandGetAddressByNotation = cli.Command{
 	Name:      "getaddressbynotation",
-	Usage:     "(online) get address by notation",
+	Category:  "online",
+	Usage:     "get address by notation",
 	ArgsUsage: "<notation>",
 	Description: `
 get address by notation`,

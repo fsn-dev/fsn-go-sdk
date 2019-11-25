@@ -27,7 +27,8 @@ import (
 var CommandGetStakeInfo = cli.Command{
 	Name:      "getstakeinfo",
 	Aliases:   []string{"getstake"},
-	Usage:     "(online) get stake info",
+	Category:  "online",
+	Usage:     "get stake info",
 	ArgsUsage: "",
 	Description: `
 get stake information`,

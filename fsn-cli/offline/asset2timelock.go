@@ -27,7 +27,8 @@ import (
 var CommandAsset2TimeLock = cli.Command{
 	Name:      "asset2timelock",
 	Aliases:   []string{"a2t"},
-	Usage:     "(offline) build asset to timelock raw transaction",
+	Category:  "offline",
+	Usage:     "build asset to timelock raw transaction",
 	ArgsUsage: "<assetID> <to> <value>",
 	Description: `
 build asset to timelock raw transaction`,

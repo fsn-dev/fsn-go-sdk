@@ -26,7 +26,8 @@ import (
 
 var CommandRecallSwap = cli.Command{
 	Name:      "recallswap",
-	Usage:     "(offline) build recall swap raw transaction",
+	Category:  "offline",
+	Usage:     "build recall swap raw transaction",
 	ArgsUsage: "<swapID>",
 	Description: `
 build recall swap raw transaction`,

@@ -25,7 +25,8 @@ import (
 var CommandSignRawTx = cli.Command{
 	Name:      "signrawtx",
 	Aliases:   []string{"signtx"},
-	Usage:     "(offline) sign raw transaction",
+	Category:  "offline",
+	Usage:     "sign raw transaction",
 	ArgsUsage: "<hexdata>",
 	Description: `
 sign raw transaction, you can replace corresponding arguments (eg. gas price)`,

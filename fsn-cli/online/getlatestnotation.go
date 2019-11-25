@@ -26,7 +26,8 @@ import (
 
 var CommandGetLatestNotation = cli.Command{
 	Name:      "getlatestnotation",
-	Usage:     "(online) get latest notation",
+	Category:  "online",
+	Usage:     "get latest notation",
 	ArgsUsage: "",
 	Description: `
 get latest notation`,

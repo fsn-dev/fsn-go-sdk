@@ -25,7 +25,8 @@ import (
 
 var CommandGenNotation = cli.Command{
 	Name:      "gennotaion",
-	Usage:     "(offline) build generate notaion raw transaction",
+	Category:  "offline",
+	Usage:     "build generate notaion raw transaction",
 	ArgsUsage: "",
 	Description: `
 build generate notaion raw transaction`,

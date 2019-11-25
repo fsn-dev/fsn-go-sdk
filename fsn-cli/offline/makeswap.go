@@ -25,7 +25,8 @@ import (
 
 var CommandMakeSwap = cli.Command{
 	Name:      "makeswap",
-	Usage:     "(offline) build make swap raw transaction",
+	Category:  "offline",
+	Usage:     "build make swap raw transaction",
 	ArgsUsage: "",
 	Description: `
 build make swap raw transaction`,

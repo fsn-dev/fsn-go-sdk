@@ -27,7 +27,8 @@ import (
 var CommandGetTimeLockBalance = cli.Command{
 	Name:      "gettimelockbalance",
 	Aliases:   []string{"gettlb"},
-	Usage:     "(online) get time lock balance",
+	Category:  "online",
+	Usage:     "get time lock balance",
 	ArgsUsage: "<assetID> <address>",
 	Description: `
 get time lock balance`,

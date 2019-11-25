@@ -25,7 +25,8 @@ import (
 
 var CommandGenAsset = cli.Command{
 	Name:      "genasset",
-	Usage:     "(offline) build generate asset raw transaction",
+	Category:  "offline",
+	Usage:     "build generate asset raw transaction",
 	ArgsUsage: "",
 	Description: `
 build generate asset raw transaction`,

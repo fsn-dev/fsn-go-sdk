@@ -27,7 +27,8 @@ import (
 var CommandGetBlockReward = cli.Command{
 	Name:      "getblockreward",
 	Aliases:   []string{"getreward"},
-	Usage:     "(online) get block reward",
+	Category:  "online",
+	Usage:     "get block reward",
 	ArgsUsage: "",
 	Description: `
 get block reward`,

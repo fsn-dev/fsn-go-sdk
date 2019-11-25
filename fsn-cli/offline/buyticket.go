@@ -27,7 +27,8 @@ import (
 
 var CommandBuyTicket = cli.Command{
 	Name:      "buyticket",
-	Usage:     "(offline) build buy ticket raw transaction",
+	Category:  "offline",
+	Usage:     "build buy ticket raw transaction",
 	ArgsUsage: "",
 	Description: `
 build buy ticket raw transaction`,
