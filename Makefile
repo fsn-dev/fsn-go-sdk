@@ -3,6 +3,10 @@
 .PHONY: account ethkey rlpdump
 .PHONY: fsn-cli mongosync
 
+# to prevent mistakely run 'bash Makefile',
+ifneq ($(OUTPUT_DIR),)
+endif
+
 all:
 	./scripts/build.sh $(shell ls -F | grep /$$)
 
