@@ -81,6 +81,7 @@ func init() {
 		extensions.CommandCmpTimeLockBalance,
 	}
 	app.Flags = append(app.Flags, utils.VerbosityFlag)
+	app.EnableBashCompletion = true
 }
 
 func main() {
