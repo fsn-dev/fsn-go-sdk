@@ -4,8 +4,8 @@
 
 1. clone the repository
 
-    mkdir -p $GOPATH/src/github.com/FusionFoundation  
-    cd $GOPATH/src/github.com/FusionFoundation  
+    mkdir -p ${GOPATH:-$HOME/go}/src/github.com/FusionFoundation  
+    cd ${GOPATH:-$HOME/go}/src/github.com/FusionFoundation  
     git clone https://github.com/fsn-dev/fsn-go-sdk.git  
     cd fsn-go-sdk  
 
