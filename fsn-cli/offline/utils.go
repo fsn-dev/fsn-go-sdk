@@ -38,11 +38,11 @@ var (
 	}
 	senderFlag = cli.StringFlag{
 		Name:  "from",
-		Usage: "transaction sender (required)",
+		Usage: "transaction sender",
 	}
 	accountNonceFlag = cli.Uint64Flag{
 		Name:  "nonce",
-		Usage: "set account nonce (required)",
+		Usage: "set account nonce",
 	}
 	gasLimitFlag = cli.Uint64Flag{
 		Name:  "gaslimit",
