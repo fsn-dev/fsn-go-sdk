@@ -21,8 +21,8 @@ version_gt() {
     test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"
 }
 golang_version=$(go version |cut -d' ' -f3 |sed 's/go//')
-if (version_gt 1.11 $golang_version); then
-    echo "go version should be greater than or equal to 1.11"
+if (version_gt 1.13 $golang_version); then
+    echo "go version should be greater than or equal to 1.13"
     exit
 fi
 
