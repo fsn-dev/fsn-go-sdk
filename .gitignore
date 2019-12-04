@@ -7,7 +7,6 @@
 /build/
 /bin/
 /vendor/
-go.sum
 
 /tmp
 */**/*un~

@@ -4,23 +4,27 @@
 
 1. clone the repository
 
+```
     mkdir -p ${GOPATH:-$HOME/go}/src/github.com/FusionFoundation  
     cd ${GOPATH:-$HOME/go}/src/github.com/FusionFoundation  
     git clone https://github.com/fsn-dev/fsn-go-sdk.git  
     cd fsn-go-sdk  
+```
 
-2. add vendor packages
+2. build project
 
-    make vendor  
-    or, make vendor_with_proxy (set goproxy if you can't get packages from golang.org)
-
-3. build project
+```
+    # set env GOPROXY if you can't get packages from golang.org
+    export GOPROXY=https://goproxy.io
 
     make fsn-cli (take `fsn-cli` as example here)  
+```
 
-4. run project
+3. run project
 
+```
     ./bin/fsn-cli (take `fsn-cli` as example here)  
+```
 
 ## commitment notes
 
@@ -35,22 +39,14 @@
 
     import from `https://github.com/FUSIONFoundation/efsn`
 
-* vendor    -- outside modules (use `go mod` to manage)
-
 * fsnapi    -- supply API to build and sign transaction, etc.
 
 * bin       -- binary output directory
 
 * scripts   -- scripts used to manage project
 
-    build.sh - build specified projects
-
-    run.sh - run specified project
-
-    gofmt.sh - format `*.go` files
-
-    gomod.sh - import vendor modules
-
-    add-license.sh - add LICENSE content to the file header
+    build.sh       -- build specified projects  
+    gofmt.sh       -- format `*.go` files  
+    add-license.sh -- add LICENSE content to the file header  
 
 [//]: # (/* vim: set ts=4 sts=4 sw=4 et : */)

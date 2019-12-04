@@ -1,5 +1,4 @@
 .PHONY: all test clean distclean fmt
-.PHONY: vendor vendor_with_proxy
 .PHONY: account ethkey rlpdump
 .PHONY: fsn-cli mongosync
 
@@ -25,9 +24,6 @@ ethkey:
 rlpdump:
 	./scripts/build.sh rlpdump
 
-bin/%:
-	./scripts/build.sh $(notdir $@)
-
 test:
 	@echo "testing Done"
 
@@ -37,13 +33,7 @@ clean:
 
 distclean:
 	go clean -cache
-	rm -rf bin vendor go.sum
-
-vendor:
-	./scripts/gomod.sh
-
-vendor_with_proxy:
-	./scripts/gomod.sh --proxy
+	rm -rf bin vendor
 
 fmt:
 	./scripts/gofmt.sh

@@ -4,6 +4,7 @@ find_files() {
   find . ! \( \
       \( \
         -path '*/.git/*' \
+        -path '*/.github/*' \
         -o -path '*/vendor/*' \
       \) -prune \
     \) -name '*.go'

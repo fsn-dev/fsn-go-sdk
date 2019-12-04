@@ -65,7 +65,10 @@ _fsn-cli()
 
     return 0
 } &&
-complete -F _fsn-cli fsn-cli
+complete -F _fsn-cli fsn-cli &&
+complete -F _fsn-cli fsncli-mainnet &&
+complete -F _fsn-cli fsncli-testnet &&
+complete -F _fsn-cli fsncli-devnet
 
 command -v $COMMAND >/dev/null 2>&1 &&
 __cli_commands=$($COMMAND --generate-bash-completion)

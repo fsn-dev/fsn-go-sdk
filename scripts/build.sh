@@ -33,17 +33,13 @@ build_project() {
         echo "Error: $main_file not exist"
         return
     fi
-    echo "RUN go build -v -mod=vendor -o bin/$project $project/*.go"
-    go build -v -mod=vendor -o bin/$project $project/*.go
+    echo "RUN go build -v -o bin/$project $project/*.go"
+    go build -v -o bin/$project $project/*.go
     echo "Build finished, run \"./bin/$project\" to launch."
 }
 
-if [[ ! -d vendor ]]; then
-    echo "please 'make vendor' or 'make vendor_with_proxy' firstly"
-    exit
-fi
-
 export GO111MODULE=on
+
 ignored_dirs="bin efsn scripts vendor fsnapi"
 for project in "$@"; do
     project=$(echo $project | sed 's#/*$##')
