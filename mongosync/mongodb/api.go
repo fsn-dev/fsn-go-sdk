@@ -27,9 +27,12 @@ var (
 	collectionSyncInfo    *mgo.Collection
 )
 
-func getOrInitCollection(table string, collection **mgo.Collection) *mgo.Collection {
+func getOrInitCollection(table string, collection **mgo.Collection, indexKey string) *mgo.Collection {
 	if *collection == nil {
 		*collection = database.C(table)
+		if indexKey != "" {
+			(*collection).EnsureIndexKey(indexKey)
+		}
 	}
 	return *collection
 }
@@ -37,11 +40,11 @@ func getOrInitCollection(table string, collection **mgo.Collection) *mgo.Collect
 func getCollection(table string) *mgo.Collection {
 	switch table {
 	case tbBlocks:
-		return getOrInitCollection(table, &collectionBlock)
+		return getOrInitCollection(table, &collectionBlock, "number")
 	case tbTransactions:
-		return getOrInitCollection(table, &collectionTransaction)
+		return getOrInitCollection(table, &collectionTransaction, "blockNumber")
 	case tbSyncInfo:
-		return getOrInitCollection(table, &collectionSyncInfo)
+		return getOrInitCollection(table, &collectionSyncInfo, "")
 	}
 	panic("unknown talbe " + table)
 }
