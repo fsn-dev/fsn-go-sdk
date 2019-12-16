@@ -154,98 +154,22 @@ func (ec *Client) GetSnapshotAtHash(ctx context.Context, hash common.Hash) (*too
 	return &result, nil
 }
 
-type RPCSwap struct {
-	ID            common.Hash
-	Owner         common.Address
-	FromAssetID   common.Hash
-	FromStartTime uint64
-	FromEndTime   uint64
-	MinFromAmount string
-	ToAssetID     common.Hash
-	ToStartTime   uint64
-	ToEndTime     uint64
-	MinToAmount   string
-	SwapSize      string
-	Targes        []common.Address
-	Time          string
-	Description   string
-	Notation      uint64
-}
-
-func (r *RPCSwap) ToSwap() *common.Swap {
-	return &common.Swap{
-		ID:            r.ID,
-		Owner:         r.Owner,
-		FromAssetID:   r.FromAssetID,
-		FromStartTime: r.FromStartTime,
-		FromEndTime:   r.FromEndTime,
-		MinFromAmount: common.GetBigInt(r.MinFromAmount),
-		ToAssetID:     r.ToAssetID,
-		ToStartTime:   r.ToStartTime,
-		ToEndTime:     r.ToEndTime,
-		MinToAmount:   common.GetBigInt(r.MinToAmount),
-		SwapSize:      common.GetBigInt(r.SwapSize),
-		Targes:        r.Targes,
-		Time:          common.GetBigInt(r.Time),
-		Description:   r.Description,
-		Notation:      r.Notation,
-	}
-}
-
 func (ec *Client) GetSwap(ctx context.Context, swapId common.Hash, blockNr *big.Int) (*common.Swap, error) {
-	var result RPCSwap
+	var result common.Swap
 	err := ec.c.CallContext(ctx, &result, "fsn_getSwap", swapId.String(), toBlockNumArg(blockNr))
 	if err != nil {
 		return nil, err
 	}
-	return result.ToSwap(), nil
-}
-
-type RPCMultiSwap struct {
-	ID            common.Hash
-	Owner         common.Address
-	FromAssetID   []common.Hash
-	FromStartTime []uint64
-	FromEndTime   []uint64
-	MinFromAmount []string
-	ToAssetID     []common.Hash
-	ToStartTime   []uint64
-	ToEndTime     []uint64
-	MinToAmount   []string
-	SwapSize      string
-	Targes        []common.Address
-	Time          string
-	Description   string
-	Notation      uint64
-}
-
-func (r *RPCMultiSwap) ToMultiSwap() *common.MultiSwap {
-	return &common.MultiSwap{
-		ID:            r.ID,
-		Owner:         r.Owner,
-		FromAssetID:   r.FromAssetID,
-		FromStartTime: r.FromStartTime,
-		FromEndTime:   r.FromEndTime,
-		MinFromAmount: common.GetBigInts(r.MinFromAmount),
-		ToAssetID:     r.ToAssetID,
-		ToStartTime:   r.ToStartTime,
-		ToEndTime:     r.ToEndTime,
-		MinToAmount:   common.GetBigInts(r.MinToAmount),
-		SwapSize:      common.GetBigInt(r.SwapSize),
-		Targes:        r.Targes,
-		Time:          common.GetBigInt(r.Time),
-		Description:   r.Description,
-		Notation:      r.Notation,
-	}
+	return &result, nil
 }
 
 func (ec *Client) GetMultiSwap(ctx context.Context, swapId common.Hash, blockNr *big.Int) (*common.MultiSwap, error) {
-	var result RPCMultiSwap
+	var result common.MultiSwap
 	err := ec.c.CallContext(ctx, &result, "fsn_getMultiSwap", swapId.String(), toBlockNumArg(blockNr))
 	if err != nil {
 		return nil, err
 	}
-	return result.ToMultiSwap(), nil
+	return &result, nil
 }
 
 func (ec *Client) GetNotation(ctx context.Context, address common.Address, blockNr *big.Int) (uint64, error) {
