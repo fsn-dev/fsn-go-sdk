@@ -1,0 +1,16 @@
+language: go
+go_import_path: github.com/FusionFoundation/fsn-go-sdk
+
+go:
+  - 1.13.x
+  - master
+
+os: linux
+arch: arm64
+dist: bionic
+
+env:
+  - GOPROXY=https://goproxy.io
+
+script:
+  - make
