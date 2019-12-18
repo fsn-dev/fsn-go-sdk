@@ -220,7 +220,7 @@ func parseFsnTx(mt *mongodb.MgoTransaction, tx *types.Transaction, receipt *type
 	if receipt == nil || len(receipt.Logs) == 0 {
 		return
 	}
-	logData, err := tools.DecodeFSNLogData(fsnCall.Func, receipt.Logs[0].Data)
+	logData, err := tools.DecodeLogData(receipt.Logs[0].Data)
 	if err != nil {
 		return
 	}

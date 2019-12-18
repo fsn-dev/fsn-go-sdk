@@ -30,37 +30,6 @@ func DecodeLogData(logData []byte) (interface{}, error) {
 	return logMap, nil
 }
 
-func DecodeFSNLogData(funcType common.FSNCallFunc, logData []byte) (interface{}, error) {
-	logMap := make(map[string]interface{})
-	if err := json.Unmarshal(logData, &logMap); err != nil {
-		return nil, fmt.Errorf("json unmarshal err: %v", err)
-	}
-	if _, hasBase := logMap["Base"]; !hasBase {
-		return logMap, nil
-	}
-	switch funcType {
-	case common.GenNotationFunc:
-		delete(logMap, "Base")
-
-	case common.BuyTicketFunc:
-		basestr, ok := logMap["Base"].(string)
-		if !ok {
-			break
-		}
-		data, err := base64.StdEncoding.DecodeString(basestr)
-		if err != nil {
-			return nil, fmt.Errorf("base64 decode err: %v", err)
-		}
-		buyTicketParam := common.BuyTicketParam{}
-		if err = rlp.DecodeBytes(data, &buyTicketParam); err == nil {
-			delete(logMap, "Base")
-			logMap["StartTime"] = buyTicketParam.Start
-			logMap["ExpireTime"] = buyTicketParam.End
-		}
-	}
-	return logMap, nil
-}
-
 func DecodeTxInput(input []byte) (interface{}, error) {
 	res, err := common.DecodeTxInput(input)
 	if err == nil {
