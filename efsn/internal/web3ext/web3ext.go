@@ -18,128 +18,18 @@
 package web3ext
 
 var Modules = map[string]string{
-	"admin":      Admin_JS,
-	"chequebook": Chequebook_JS,
-	"clique":     Clique_JS,
-	"ethash":     Ethash_JS,
-	"debug":      Debug_JS,
-	"eth":        Eth_JS,
-	"miner":      Miner_JS,
-	"net":        Net_JS,
-	"personal":   Personal_JS,
-	"rpc":        RPC_JS,
-	"shh":        Shh_JS,
-	"swarmfs":    SWARMFS_JS,
-	"txpool":     TxPool_JS,
-	"fsn":        FsnJS,
-	"fsntx":      FsnTxJS,
-	"fsnbt":      FsnBT,
+	"admin":    Admin_JS,
+	"debug":    Debug_JS,
+	"eth":      Eth_JS,
+	"miner":    Miner_JS,
+	"net":      Net_JS,
+	"personal": Personal_JS,
+	"rpc":      RPC_JS,
+	"txpool":   TxPool_JS,
+	"fsn":      FsnJS,
+	"fsntx":    FsnTxJS,
+	"fsnbt":    FsnBT,
 }
-
-const Chequebook_JS = `
-web3._extend({
-	property: 'chequebook',
-	methods: [
-		new web3._extend.Method({
-			name: 'deposit',
-			call: 'chequebook_deposit',
-			params: 1,
-			inputFormatter: [null]
-		}),
-		new web3._extend.Property({
-			name: 'balance',
-			getter: 'chequebook_balance',
-			outputFormatter: web3._extend.utils.toDecimal
-		}),
-		new web3._extend.Method({
-			name: 'cash',
-			call: 'chequebook_cash',
-			params: 1,
-			inputFormatter: [null]
-		}),
-		new web3._extend.Method({
-			name: 'issue',
-			call: 'chequebook_issue',
-			params: 2,
-			inputFormatter: [null, null]
-		}),
-	]
-});
-`
-
-const Clique_JS = `
-web3._extend({
-	property: 'clique',
-	methods: [
-		new web3._extend.Method({
-			name: 'getSnapshot',
-			call: 'clique_getSnapshot',
-			params: 1,
-			inputFormatter: [null]
-		}),
-		new web3._extend.Method({
-			name: 'getSnapshotAtHash',
-			call: 'clique_getSnapshotAtHash',
-			params: 1
-		}),
-		new web3._extend.Method({
-			name: 'getSigners',
-			call: 'clique_getSigners',
-			params: 1,
-			inputFormatter: [null]
-		}),
-		new web3._extend.Method({
-			name: 'getSignersAtHash',
-			call: 'clique_getSignersAtHash',
-			params: 1
-		}),
-		new web3._extend.Method({
-			name: 'propose',
-			call: 'clique_propose',
-			params: 2
-		}),
-		new web3._extend.Method({
-			name: 'discard',
-			call: 'clique_discard',
-			params: 1
-		}),
-	],
-	properties: [
-		new web3._extend.Property({
-			name: 'proposals',
-			getter: 'clique_proposals'
-		}),
-	]
-});
-`
-
-const Ethash_JS = `
-web3._extend({
-	property: 'ethash',
-	methods: [
-		new web3._extend.Method({
-			name: 'getWork',
-			call: 'ethash_getWork',
-			params: 0
-		}),
-		new web3._extend.Method({
-			name: 'getHashrate',
-			call: 'ethash_getHashrate',
-			params: 0
-		}),
-		new web3._extend.Method({
-			name: 'submitWork',
-			call: 'ethash_submitWork',
-			params: 3,
-		}),
-		new web3._extend.Method({
-			name: 'submitHashRate',
-			call: 'ethash_submitHashRate',
-			params: 2,
-		}),
-	]
-});
-`
 
 const Admin_JS = `
 web3._extend({
@@ -247,6 +137,9 @@ web3._extend({
 			name: 'dumpBlock',
 			call: 'debug_dumpBlock',
 			params: 1
+			inputFormatter: [
+				web3._extend.formatters.inputDefaultBlockNumberFormatter
+			]
 		}),
 		new web3._extend.Method({
 			name: 'chaindbProperty',
@@ -618,50 +511,6 @@ web3._extend({
 });
 `
 
-const Shh_JS = `
-web3._extend({
-	property: 'shh',
-	methods: [
-	],
-	properties:
-	[
-		new web3._extend.Property({
-			name: 'version',
-			getter: 'shh_version',
-			outputFormatter: web3._extend.utils.toDecimal
-		}),
-		new web3._extend.Property({
-			name: 'info',
-			getter: 'shh_info'
-		}),
-	]
-});
-`
-
-const SWARMFS_JS = `
-web3._extend({
-	property: 'swarmfs',
-	methods:
-	[
-		new web3._extend.Method({
-			name: 'mount',
-			call: 'swarmfs_mount',
-			params: 2
-		}),
-		new web3._extend.Method({
-			name: 'unmount',
-			call: 'swarmfs_unmount',
-			params: 1
-		}),
-		new web3._extend.Method({
-			name: 'listmounts',
-			call: 'swarmfs_listmounts',
-			params: 0
-		}),
-	]
-});
-`
-
 const TxPool_JS = `
 web3._extend({
 	property: 'txpool',
@@ -698,12 +547,22 @@ web3._extend({
 			name: 'getSnapshot',
 			call: 'fsn_getSnapshot',
 			params: 1,
-			inputFormatter: [null]
+			inputFormatter: [
+				web3._extend.formatters.inputDefaultBlockNumberFormatter
+			]
 		}),
 		new web3._extend.Method({
 			name: 'getSnapshotAtHash',
 			call: 'fsn_getSnapshotAtHash',
 			params: 1
+		}),
+		new web3._extend.Method({
+			name: 'getBlockReward',
+			call: 'fsn_getBlockReward',
+			params: 1,
+			inputFormatter: [
+				web3._extend.formatters.inputDefaultBlockNumberFormatter
+			]
 		}),
 		new web3._extend.Method({
 			name: 'getBalance',
@@ -731,6 +590,18 @@ web3._extend({
 			inputFormatter: [
 				null,
 				web3._extend.formatters.inputAddressFormatter,
+				web3._extend.formatters.inputDefaultBlockNumberFormatter
+			]
+		}),
+		new web3._extend.Method({
+			name: 'getTimeLockValue',
+			call: 'fsn_getTimeLockValue',
+			params: 5,
+			inputFormatter: [
+				null,
+				web3._extend.formatters.inputAddressFormatter,
+				null,
+				null,
 				web3._extend.formatters.inputDefaultBlockNumberFormatter
 			]
 		}),
@@ -1082,6 +953,14 @@ web3._extend({
 			name: 'isAutoBuyTicket',
 			call: 'fsn_isAutoBuyTicket',
 			params: 0
+		}),
+		new web3._extend.Method({
+			name: 'getLatestNotation',
+			call: 'fsn_getLatestNotation',
+			params: 1,
+			inputFormatter: [
+				web3._extend.formatters.inputDefaultBlockNumberFormatter
+			]
 		}),
 	],
 	properties:[

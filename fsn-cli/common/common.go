@@ -61,8 +61,11 @@ func GetHexBigIntFromText(whatValue, bigIntStr string) *hexutil.Big {
 }
 
 func GetUint64FromText(whatValue, str string) uint64 {
-	big := GetBigIntFromText(whatValue, str)
-	return big.Uint64()
+	bi := GetBigIntFromText(whatValue, str)
+	if !bi.IsUint64() {
+		utils.Fatalf("Invalid %s value: %s (overflow)", whatValue, str)
+	}
+	return bi.Uint64()
 }
 
 func GetHexUint64(value uint64) *hexutil.Uint64 {

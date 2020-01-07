@@ -70,6 +70,7 @@ func init() {
 		online.CommandGetAllBalances,
 		online.CommandGetTimeLockBalance,
 		online.CommandGetAllTimeLockBalances,
+		online.CommandGetTimeLockValue,
 		online.CommandIsAutoBuyTicket,
 		online.CommandTicketPrice,
 		online.CommandTotalNumberOfTickets,

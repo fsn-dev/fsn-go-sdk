@@ -95,13 +95,13 @@ const (
 
 func (z *TimeLockItem) Add(x *TimeLockItem) ([]*TimeLockItem, TailFlag) {
 	if x.EndTime < z.StartTime {
-		if x.CanMerge(z) == true {
+		if x.CanMerge(z) {
 			return []*TimeLockItem{x.Merge(z)}, TailInFirst
 		}
 		return []*TimeLockItem{x, z}, TailInFirst
 	}
 	if z.EndTime < x.StartTime {
-		if z.CanMerge(x) == true {
+		if z.CanMerge(x) {
 			return []*TimeLockItem{z.Merge(x)}, TailInSecond
 		}
 		return []*TimeLockItem{z, x}, TailInSecond
@@ -354,7 +354,7 @@ func (z *TimeLock) Cmp(x *TimeLock) int {
 	if x == nil || len(x.Items) != 1 {
 		panic("Cmp Just Support One TimeLockItem")
 	}
-	if z.IsEmpty() == true {
+	if z.IsEmpty() {
 		return -1
 	}
 	if err := x.IsValid(); err != nil {
@@ -404,6 +404,40 @@ func (z *TimeLock) Cmp(x *TimeLock) int {
 	return cmpVal
 }
 
+func (z *TimeLock) GetSpendableValue(start, end uint64) *big.Int {
+	if start > end || z.IsEmpty() {
+		return big.NewInt(0)
+	}
+	if z.Items[len(z.Items)-1].EndTime < end {
+		return big.NewInt(0) // has tail gap
+	}
+	result := big.NewInt(0)
+	var tempEnd uint64
+	for _, item := range z.Items {
+		if item.EndTime < start {
+			continue
+		}
+		if tempEnd == 0 {
+			if item.StartTime > start {
+				return big.NewInt(0) // has head gap
+			}
+			result = item.Value
+		} else {
+			if item.StartTime != tempEnd+1 {
+				return big.NewInt(0) // has middle gap
+			}
+			if item.Value.Cmp(result) < 0 {
+				result = item.Value
+			}
+		}
+		tempEnd = item.EndTime
+		if tempEnd >= end {
+			break
+		}
+	}
+	return result
+}
+
 func (z *TimeLock) ClearExpired(timestamp uint64) *TimeLock {
 	for i := 0; i < len(z.Items); i++ {
 		t := z.Items[i]
@@ -424,7 +458,7 @@ func (z *TimeLock) IsValid() error {
 			return fmt.Errorf("TimeLock is invalid, index:%v err:%v", i, err)
 		}
 		if prev != nil {
-			if prev.EndTime >= next.StartTime || prev.CanMerge(next) == true {
+			if prev.EndTime >= next.StartTime || prev.CanMerge(next) {
 				return fmt.Errorf("TimeLock is invalid, index:%v, prev:%v, next:%v", i, prev, next)
 			}
 		}
