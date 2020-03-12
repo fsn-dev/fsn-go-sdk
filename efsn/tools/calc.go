@@ -30,7 +30,9 @@ func GetBlockReward(block *types.Block, receipts types.Receipts) *big.Int {
 	reward := CalcRewards(block.Number())
 	gasUses := make(map[common.Hash]uint64)
 	for _, receipt := range receipts {
-		gasUses[receipt.TxHash] = receipt.GasUsed
+		if receipt != nil {
+			gasUses[receipt.TxHash] = receipt.GasUsed
+		}
 	}
 	for _, tx := range block.Transactions() {
 		if gasUsed, ok := gasUses[tx.Hash()]; ok {
