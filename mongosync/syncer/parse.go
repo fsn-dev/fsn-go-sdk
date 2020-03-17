@@ -205,11 +205,42 @@ func (w *Worker) parseTx(i int, tx *types.Transaction, block *types.Block, recei
 	// Fusion related
 	if common.IsFsnCall(tx.To()) {
 		parseFsnTx(mt, tx, receipt)
+	} else if receipt != nil && len(receipt.Logs) != 0 {
+		mt.Log = parseReceiptLogs(receipt.Logs) // mt.Log
 	}
 
 	tryDoTimes("AddTransaction "+hash, func() error {
 		return mongodb.AddTransaction(mt, Overwrite)
 	})
+}
+
+func hashesToStrings(hashes []common.Hash) []string {
+	res := make([]string, len(hashes))
+	for k, v := range hashes {
+		res[k] = v.String()
+	}
+	return res
+}
+
+func parseReceiptLogs(rlogs []*types.Log) []map[string]interface{} {
+	if len(rlogs) == 0 {
+		return nil
+	}
+	logs := make([]map[string]interface{}, len(rlogs))
+	for k, v := range rlogs {
+		logs[k] = make(map[string]interface{})
+		res := logs[k]
+		res["contract"] = strings.ToLower(v.Address.String())
+		if len(v.Topics) == 0 {
+			continue
+		}
+		switch v.Topics[0] {
+		default:
+			res["topics"] = hashesToStrings(v.Topics)
+			res["data"] = hexutil.Encode(v.Data)
+		}
+	}
+	return logs
 }
 
 func parseFsnTx(mt *mongodb.MgoTransaction, tx *types.Transaction, receipt *types.Receipt) {
