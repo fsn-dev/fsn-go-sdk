@@ -235,6 +235,21 @@ func parseReceiptLogs(rlogs []*types.Log) []map[string]interface{} {
 			continue
 		}
 		switch v.Topics[0] {
+		case common.LogFusionAssetReceivedTopic, common.LogFusionAssetSentTopic:
+			isReceive := v.Topics[0] == common.LogFusionAssetReceivedTopic
+			res["asset"] = v.Topics[1].String()
+			addr := strings.ToLower(common.BytesToAddress(v.Topics[2].Bytes()).String())
+			if isReceive {
+				res["from"] = addr
+				res["topic"] = "TimeLockContractReceive"
+			} else {
+				res["to"] = addr
+				res["topic"] = "TimeLockContractSend"
+			}
+			res["value"] = common.GetBigInt(v.Data, 0, 32).String()
+			res["start"] = common.GetBigInt(v.Data, 32, 32).String()
+			res["end"] = common.GetBigInt(v.Data, 64, 32).String()
+			res["flag"] = common.GetBigInt(v.Data, 96, 32).String()
 		default:
 			res["topics"] = hashesToStrings(v.Topics)
 			res["data"] = hexutil.Encode(v.Data)
