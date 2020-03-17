@@ -3,7 +3,6 @@ package common
 import (
 	"encoding/hex"
 	"fmt"
-	"math/big"
 	"reflect"
 	"time"
 )
@@ -99,34 +98,4 @@ func DebugCall(callback func()) {
 		return
 	}
 	callback()
-}
-
-func MinUint64(x, y uint64) uint64 {
-	if x <= y {
-		return x
-	}
-	return y
-}
-
-func MaxUint64(x, y uint64) uint64 {
-	if x < y {
-		return y
-	}
-	return x
-}
-
-func GetBigInt(str string) *big.Int {
-	bi, ok := new(big.Int).SetString(str, 0)
-	if ok {
-		return bi
-	}
-	return nil
-}
-
-func GetBigInts(strs []string) []*big.Int {
-	res := make([]*big.Int, len(strs))
-	for i, str := range strs {
-		res[i] = GetBigInt(str)
-	}
-	return res
 }

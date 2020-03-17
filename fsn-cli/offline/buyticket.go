@@ -55,7 +55,7 @@ func buyticket(ctx *cli.Context) error {
 	// 2. check parameters
 	now := uint64(time.Now().Unix())
 	args.Init(now)
-	if err := args.ToParam().Check(common.BigMaxUint64, now, 600); err != nil {
+	if err := args.ToParam().Check(common.BigMaxUint64, now); err != nil {
 		utils.Fatalf("check parameter failed: %v", err)
 	}
 

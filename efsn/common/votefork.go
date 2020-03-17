@@ -22,20 +22,6 @@ var (
 	}
 )
 
-func IsTransactionFrozen(blockNumber *big.Int) bool {
-	height := blockNumber.Uint64()
-	return height <= VOTE1_FREEZE_TX_END && height >= VOTE1_FREEZE_TX_START
-}
-
 func IsVote1ForkBlock(blockNumber *big.Int) bool {
 	return blockNumber.Uint64() == VOTE1_FREEZE_TX_END
-}
-
-func IsInVote1DrainList(addr Address) bool {
-	for _, item := range Vote1DrainList {
-		if addr == item {
-			return true
-		}
-	}
-	return false
 }

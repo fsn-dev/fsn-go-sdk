@@ -332,7 +332,6 @@ func (args *MakeMultiSwapArgs) Init(time *big.Int) {
 }
 
 func (args *MakeMultiSwapArgs) ToParam() *MakeMultiSwapParam {
-
 	fromStartTime := make([]uint64, len(args.FromStartTime))
 	for i := 0; i < len(args.FromStartTime); i++ {
 		fromStartTime[i] = uint64(*args.FromStartTime[i])

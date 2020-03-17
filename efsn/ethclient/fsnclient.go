@@ -10,6 +10,14 @@ import (
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
 )
 
+func strToBigInt(str string) *big.Int {
+	bi, ok := new(big.Int).SetString(str, 0)
+	if ok {
+		return bi
+	}
+	return nil
+}
+
 type RPCAsset struct {
 	ID          common.Hash
 	Owner       common.Address
@@ -28,7 +36,7 @@ func (r *RPCAsset) ToAsset() *common.Asset {
 		Name:        r.Name,
 		Symbol:      r.Symbol,
 		Decimals:    r.Decimals,
-		Total:       common.GetBigInt(r.Total),
+		Total:       strToBigInt(r.Total),
 		CanChange:   r.CanChange,
 		Description: r.Description,
 	}
@@ -49,7 +57,7 @@ func (ec *Client) GetBalance(ctx context.Context, assetId common.Hash, address c
 	if err != nil {
 		return nil, err
 	}
-	return common.GetBigInt(result), nil
+	return strToBigInt(result), nil
 }
 
 func (ec *Client) GetAllBalances(ctx context.Context, address common.Address, blockNr *big.Int) (map[common.Hash]*big.Int, error) {
@@ -60,7 +68,7 @@ func (ec *Client) GetAllBalances(ctx context.Context, address common.Address, bl
 	}
 	ret := make(map[common.Hash]*big.Int, len(result))
 	for k, v := range result {
-		ret[k] = common.GetBigInt(v)
+		ret[k] = strToBigInt(v)
 	}
 	return ret, nil
 }
@@ -78,7 +86,7 @@ func (r *RPCTimeLockItem) ToTimeLockItem() *common.TimeLockItem {
 	return &common.TimeLockItem{
 		StartTime: r.StartTime,
 		EndTime:   r.EndTime,
-		Value:     common.GetBigInt(r.Value),
+		Value:     strToBigInt(r.Value),
 	}
 }
 
@@ -107,7 +115,7 @@ func (ec *Client) GetTimeLockValue(ctx context.Context, assetId common.Hash, add
 	if err != nil {
 		return nil, err
 	}
-	return common.GetBigInt(result), nil
+	return strToBigInt(result), nil
 }
 
 func (ec *Client) GetRawTimeLockBalance(ctx context.Context, assetId common.Hash, address common.Address, blockNr *big.Int) (*common.TimeLock, error) {
@@ -241,7 +249,7 @@ func (ec *Client) TicketPrice(ctx context.Context, blockNr *big.Int) (*big.Int, 
 	if err != nil {
 		return nil, err
 	}
-	return common.GetBigInt(result), nil
+	return strToBigInt(result), nil
 }
 
 func (ec *Client) TotalNumberOfTickets(ctx context.Context, blockNr *big.Int) (int, error) {
@@ -277,7 +285,7 @@ func (r *RPCAllInfoForAddress) ToAllInfoForAddress() *common.AllInfoForAddress {
 		Notation:  r.Notation,
 	}
 	for k, v := range r.Balances {
-		ret.Balances[k] = common.GetBigInt(v)
+		ret.Balances[k] = strToBigInt(v)
 	}
 	for k, v := range r.Timelocks {
 		ret.Timelocks[k] = v.ToTimeLock()
@@ -309,7 +317,7 @@ func (ec *Client) GetBlockReward(ctx context.Context, blockNr *big.Int) (*big.In
 	if err != nil {
 		return nil, err
 	}
-	return common.GetBigInt(result), nil
+	return strToBigInt(result), nil
 }
 
 type RPCTransaction struct {
