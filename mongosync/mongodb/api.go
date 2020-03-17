@@ -51,11 +51,19 @@ func getCollection(table string) *mgo.Collection {
 
 // --------------- add ---------------------------------
 
-func AddBlock(mb *MgoBlock) error {
+func AddBlock(mb *MgoBlock, overwrite bool) error {
+	if overwrite {
+		_, err := getCollection(tbBlocks).UpsertId(mb.Key, mb)
+		return err
+	}
 	return getCollection(tbBlocks).Insert(mb)
 }
 
-func AddTransaction(mt *MgoTransaction) error {
+func AddTransaction(mt *MgoTransaction, overwrite bool) error {
+	if overwrite {
+		_, err := getCollection(tbTransactions).UpsertId(mt.Key, mt)
+		return err
+	}
 	return getCollection(tbTransactions).Insert(mt)
 }
 

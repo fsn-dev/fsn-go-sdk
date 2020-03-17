@@ -111,7 +111,7 @@ func (w *Worker) parseBlock(block *types.Block, receipts types.Receipts, wg *syn
 	w.parseSnapshot(mb, block.Header())
 
 	tryDoTimes("AddBlock "+hash, func() error {
-		return mongodb.AddBlock(mb)
+		return mongodb.AddBlock(mb, Overwrite)
 	})
 }
 
@@ -208,7 +208,7 @@ func (w *Worker) parseTx(i int, tx *types.Transaction, block *types.Block, recei
 	}
 
 	tryDoTimes("AddTransaction "+hash, func() error {
-		return mongodb.AddTransaction(mt)
+		return mongodb.AddTransaction(mt, Overwrite)
 	})
 }
 
