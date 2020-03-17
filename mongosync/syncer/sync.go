@@ -152,13 +152,15 @@ func (s *Syncer) dipatchWork() {
 	if last > start {
 		blockCount = last - start
 	}
-	if blockCount < minWorkBlocks {
+	if blockCount < minWorkBlocks && s.end == 0 {
 		s.last = start
 		return
 	}
 	workerCount := blockCount / minWorkBlocks
 	if workerCount > JobCount {
 		workerCount = JobCount
+	} else if workerCount == 0 {
+		workerCount = 1
 	}
 	stepCount := blockCount / workerCount
 
@@ -316,7 +318,7 @@ func (w *Worker) syncRange(start, end uint64) {
 			time.Sleep(waitDuration)
 			continue
 		}
-		if len(mblocks) == int(to-from+1) {
+		if !Overwrite && len(mblocks) == int(to-from+1) {
 			log.Info("syncRange already synced", "id", w.id, "from", from, "to", to)
 			height = to + 1
 			continue
