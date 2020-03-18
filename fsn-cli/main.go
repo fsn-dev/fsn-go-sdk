@@ -46,6 +46,7 @@ func init() {
 		offline.CommandAsset2TimeLock,
 		offline.CommandTimeLock2Asset,
 		offline.CommandTimeLock2Timelock,
+		offline.CommandSendTimelock,
 		offline.CommandMakeSwap,
 		offline.CommandTakeSwap,
 		offline.CommandRecallSwap,
