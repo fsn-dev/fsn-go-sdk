@@ -109,9 +109,9 @@ func (ec *Client) GetTimeLockBalance(ctx context.Context, assetId common.Hash, a
 	return result.ToTimeLock(), nil
 }
 
-func (ec *Client) GetTimeLockValue(ctx context.Context, assetId common.Hash, address common.Address, startTime, endTime uint64, blockNr *big.Int) (*big.Int, error) {
+func (ec *Client) GetTimeLockValueByInterval(ctx context.Context, assetId common.Hash, address common.Address, startTime, endTime uint64, blockNr *big.Int) (*big.Int, error) {
 	var result string
-	err := ec.c.CallContext(ctx, &result, "fsn_getTimeLockValue", assetId.String(), address, startTime, endTime, toBlockNumArg(blockNr))
+	err := ec.c.CallContext(ctx, &result, "fsn_getTimeLockValueByInterval", assetId.String(), address, startTime, endTime, toBlockNumArg(blockNr))
 	if err != nil {
 		return nil, err
 	}

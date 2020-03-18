@@ -25,7 +25,7 @@ import (
 )
 
 var CommandGetTimeLockValue = cli.Command{
-	Name:      "getTimeLockValue",
+	Name:      "gettimelockvalue",
 	Aliases:   []string{"gettlv"},
 	Category:  "online",
 	Usage:     "get time lock value",
@@ -36,13 +36,13 @@ get time lock spendable value between specified time range`,
 		blockHeightFlag,
 		serverAddrFlag,
 	},
-	Action: getTimeLockValue,
+	Action: gettimelockvalue,
 }
 
-func getTimeLockValue(ctx *cli.Context) error {
+func gettimelockvalue(ctx *cli.Context) error {
 	setLogger(ctx)
 	if len(ctx.Args()) != 4 {
-		cli.ShowCommandHelpAndExit(ctx, "getTimeLockValue", 1)
+		cli.ShowCommandHelpAndExit(ctx, "gettimelockvalue", 1)
 	}
 
 	client := dialServer(ctx)
@@ -54,7 +54,7 @@ func getTimeLockValue(ctx *cli.Context) error {
 	endTime := clicommon.GetUint64FromText("endTime", ctx.Args().Get(3))
 	blockNr := clicommon.GetBlockNumberFromText(ctx.String(blockHeightFlag.Name))
 
-	balance, err := client.GetTimeLockValue(context.Background(), assetID, address, startTime, endTime, blockNr)
+	balance, err := client.GetTimeLockValueByInterval(context.Background(), assetID, address, startTime, endTime, blockNr)
 	if err != nil {
 		return err
 	}
