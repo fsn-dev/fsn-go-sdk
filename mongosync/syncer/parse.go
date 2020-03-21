@@ -274,6 +274,16 @@ func parseFsnTx(mt *mongodb.MgoTransaction, tx *types.Transaction, receipt *type
 	if !ok {
 		return
 	}
+	if fsnCall.Func == common.ReportIllegalFunc {
+		if del, ok := logMap["DeleteTickets"]; ok {
+			if delstr, ok := del.(string); ok {
+				deltickets, err := tools.DecodePunishTickets(delstr)
+				if err == nil {
+					logMap["DeleteTickets"] = hashesToStrings(deltickets)
+				}
+			}
+		}
+	}
 	mt.Log = logMap // mt.Log
 
 	if assetID, ok := logMap["AssetID"].(string); ok {

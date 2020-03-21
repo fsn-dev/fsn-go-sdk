@@ -8,6 +8,7 @@ import (
 
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
 	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
 )
@@ -83,6 +84,19 @@ func DecodeReport(report []byte) (*types.Header, *types.Header, error) {
 		return nil, nil, fmt.Errorf("can not decode header2, err=%v", err)
 	}
 	return header1, header2, nil
+}
+
+func DecodePunishTickets(delTicketsData string) ([]common.Hash, error) {
+	bs, err := hexutil.Decode(delTicketsData)
+	if err != nil {
+		return nil, fmt.Errorf("decode hex data error: %v", err)
+	}
+	delTickets := []common.Hash{}
+	if err := rlp.DecodeBytes(bs, &delTickets); err != nil {
+		return nil, fmt.Errorf("decode report log error: %v", err)
+	}
+
+	return delTickets, nil
 }
 
 // MustPrintJSON prints the JSON encoding of the given object and
