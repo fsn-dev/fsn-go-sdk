@@ -140,3 +140,79 @@ it will create 3 collections (tables): `SyncInfo`, `Blocks`, `Transactions`
 |Type             |string      |`bson:"type"` // spec|
 |Log              |interface{} |`bson:"log"`  // spec|
 
+**We call a transaction a `FsnCall transaction` is its `to` address is `0xffffffffffffffffffffffffffffffffffffffff`**
+
+* type explain
+
+1. For `non-FsnCall` transaction, the type is always `Origin`
+
+2. For `FsnCall` transaction, the type is related to the func type it's calling:
+
+```js
+   GenNotationFunc
+   GenAssetFunc
+   SendAssetFunc
+   TimeLockFunc
+   BuyTicketFunc
+   OldAssetValueChangeFunc
+   MakeSwapFunc
+   RecallSwapFunc
+   TakeSwapFunc
+   EmptyFunc
+   MakeSwapFuncExt
+   TakeSwapFuncExt
+   AssetValueChangeFunc
+   MakeMultiSwapFunc
+   RecallMultiSwapFunc
+   TakeMultiSwapFunc
+   ReportIllegalFunc
+```
+
+* log explain
+
+1. For `FsnCall` transaction
+
+   log is an `object` with different keys for each FsnCall `type`.
+
+   example:
+   ```js
+   "type" : "TimeLockFunc",
+   "log" : {
+         "StartTime" : 1564790400,
+         "To" : "0x0122bf3930c1201a21133937ad5c83eb4ded1b08",
+         "Type" : 0,
+         "Value" : 5e+21,
+         "AssetID" : "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+         "EndTime" : 1570233600,
+         "LockType" : "AssetToTimeLock"
+      }
+   ```
+
+2. For `Smart Contract` transaction
+
+   log is an `array` of `object` (always has `contract` key). Using array here because the `contract codes` may `emit` multiple `events` in on calling decided by the contract creator.
+
+   For `normal` contract transaction log, we just store `topics` (array of hex hash string) and `data` (hex string), because we do not know its concrete meaning.
+
+   For `Timelock` contract transaction log, we know the meaning of its topics and data. We decode it to more meaningful contents. We have a `topic` key which has two values `TimeLockContractReceive` and `TimeLockContractSend` to distinguish timelock receiving from sending.
+
+   example:
+   ```js
+   "type" : "Origin",
+   "log" : [
+      {
+         "contract" : "0xe4d4b3ee807153a9de398806f7557415e05afc7f",
+         "asset" : "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+         "from" : "0x0122bf3930c1201a21133937ad5c83eb4ded1b08",
+         "topic" : "TimeLockContractReceive",
+         "value" : "10000000000000000000",
+         "start" : "1583312152",
+         "end" : "1614671636",
+         "flag" : "0"
+      }
+   ]
+   ```
+
+3. For `Other` transaction
+
+   log is `null`
