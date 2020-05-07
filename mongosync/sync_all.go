@@ -53,6 +53,10 @@ var (
 		Name:  "overwrite",
 		Usage: "overwrite synced entries",
 	}
+	archiveModeFlag = cli.BoolTFlag{
+		Name:  "archive",
+		Usage: "specify whether the server node is using archive mode. If not we may not get retreated tickets info etc.",
+	}
 )
 
 var commandSyncAll = cli.Command{
@@ -69,6 +73,7 @@ severURL support "http", "https", "ws", "wss", "stdio", IPC file`,
 		startFlag,
 		endFlag,
 		overwriteFlag,
+		archiveModeFlag,
 	},
 	Action: syncAll,
 }
@@ -86,11 +91,13 @@ func syncAll(ctx *cli.Context) error {
 	start := ctx.Uint64(startFlag.Name)
 	end := ctx.Uint64(endFlag.Name)
 	overwrite := ctx.Bool(overwriteFlag.Name)
+	archiveMode := ctx.Bool(archiveModeFlag.Name)
 	jobs := ctx.GlobalUint64(jobsFlag.Name)
 	interval := ctx.GlobalUint64(intervalFlag.Name)
 
 	syncer.ServerURL = serverAddress
 	syncer.Overwrite = overwrite
+	syncer.ArchiveMode = archiveMode
 	syncer.BlockInterval = interval
 	syncer.SetJobCount(jobs)
 	syncer.InitMongoServer(mongoURL, dbName)

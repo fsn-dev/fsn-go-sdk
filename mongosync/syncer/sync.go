@@ -33,6 +33,7 @@ import (
 var (
 	ServerURL     string
 	Overwrite     bool
+	ArchiveMode   bool
 	JobCount      uint64 = 10
 	BlockInterval uint64 = 100
 
@@ -365,6 +366,9 @@ func (w *Worker) syncRange(start, end uint64) {
 func (w *Worker) getTicketsOwner(tids []common.Hash, blockNumber *big.Int) []common.Address {
 	owners := make([]common.Address, len(tids))
 	if len(tids) == 0 {
+		return owners
+	}
+	if !ArchiveMode {
 		return owners
 	}
 	data, err := client.CodeAt(cliContext, common.TicketKeyAddress, blockNumber)
