@@ -20,6 +20,7 @@ const (
 	tbSyncInfo     string = "SyncInfo"
 	tbBlocks       string = "Blocks"
 	tbTransactions string = "Transactions"
+	tbContracts    string = "Contracts"
 
 	KeyOfLatestSyncInfo string = "latest"
 )
@@ -75,4 +76,9 @@ type MgoTransaction struct {
 	CoinType         string      `bson:"coinType"`
 	Type             string      `bson:"type"` // spec
 	Log              interface{} `bson:"log"`  // spec
+}
+
+type MgoContract struct {
+	Key  string `bson:"_id"`
+	Type string `bson:"type"` // ERC20, MBTC, ...
 }

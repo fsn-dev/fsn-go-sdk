@@ -25,6 +25,7 @@ var (
 	collectionBlock       *mgo.Collection
 	collectionTransaction *mgo.Collection
 	collectionSyncInfo    *mgo.Collection
+	collectionContracts   *mgo.Collection
 )
 
 func getOrInitCollection(table string, collection **mgo.Collection, indexKey string) *mgo.Collection {
@@ -45,6 +46,8 @@ func getCollection(table string) *mgo.Collection {
 		return getOrInitCollection(table, &collectionTransaction, "blockNumber")
 	case tbSyncInfo:
 		return getOrInitCollection(table, &collectionSyncInfo, "")
+	case tbContracts:
+		return getOrInitCollection(table, &collectionContracts, "")
 	}
 	panic("unknown talbe " + table)
 }
@@ -80,6 +83,10 @@ func InitLatestSyncInfo() error {
 		Key: KeyOfLatestSyncInfo,
 	}
 	return AddSyncInfo(msi)
+}
+
+func AddContract(mc *MgoContract) error {
+	return getCollection(tbContracts).Insert(mc)
 }
 
 // --------------- update ---------------------------------
@@ -162,4 +169,13 @@ func FindLatestSyncInfo() (*MgoSyncInfo, error) {
 		return nil, err
 	}
 	return &info, nil
+}
+
+func FindContract(address string) (*MgoContract, error) {
+	var contract MgoContract
+	err := getCollection(tbContracts).FindId(address).One(&contract)
+	if err != nil {
+		return nil, err
+	}
+	return &contract, nil
 }

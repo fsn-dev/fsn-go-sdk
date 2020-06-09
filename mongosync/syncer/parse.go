@@ -202,11 +202,18 @@ func (w *Worker) parseTx(i int, tx *types.Transaction, block *types.Block, recei
 	mt.CoinType = defaultCoinType
 	mt.Type = defaultTxType
 
-	// Fusion related
-	if common.IsFsnCall(tx.To()) {
+	if tx.To() == nil {
+		parseContractCreation(mt, tx, receipt)
+	} else if common.IsFsnCall(tx.To()) { // Fusion related
 		parseFsnTx(mt, tx, receipt)
-	} else if receipt != nil && len(receipt.Logs) != 0 {
-		mt.Log = parseReceiptLogs(receipt.Logs) // mt.Log
+	} else {
+		if receipt != nil && len(receipt.Logs) != 0 {
+			mt.Log = parseReceiptLogs(receipt.Logs) // mt.Log
+		}
+		mc, _ := mongodb.FindContract(mt.To)
+		if mc != nil {
+			mt.Type = mc.Type
+		}
 	}
 
 	tryDoTimes("AddTransaction "+hash, func() error {
@@ -314,4 +321,28 @@ func getTxSender(tx *types.Transaction) common.Address {
 	signer := types.NewEIP155Signer(tx.ChainId())
 	sender, _ := types.Sender(signer, tx)
 	return sender
+}
+
+func parseContractCreation(mt *mongodb.MgoTransaction, tx *types.Transaction, receipt *types.Receipt) {
+	mt.Type = "CreateContract"
+	if receipt == nil {
+		return
+	}
+	contractAddress := strings.ToLower(receipt.ContractAddress.String())
+	contractType := "unknown"
+	createCode := tx.Data()
+	switch {
+	case tools.IsMbtcContract(createCode):
+		contractType = "MBTC"
+	case tools.IsErc20Contract(createCode):
+		contractType = "ERC20"
+	}
+
+	mc := &mongodb.MgoContract{
+		Key:  contractAddress,
+		Type: contractType,
+	}
+	tryDoTimes("AddContract "+contractAddress, func() error {
+		return mongodb.AddContract(mc)
+	})
 }
