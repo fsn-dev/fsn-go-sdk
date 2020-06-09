@@ -17,7 +17,7 @@
 // Package bind generates Ethereum contract Go bindings.
 //
 // Detailed usage document and tutorial available on the go-ethereum Wiki page:
-// https://github.com/FusionFoundation/fsn-go-sdk/efsn/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts
+// https://github.com/fsn-dev/fsn-go-sdk/efsn/wiki/Native-DApps:-Go-bindings-to-Ethereum-contracts
 package bind
 
 import (
@@ -28,7 +28,7 @@ import (
 	"text/template"
 	"unicode"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/abi"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts/abi"
 	"golang.org/x/tools/imports"
 )
 

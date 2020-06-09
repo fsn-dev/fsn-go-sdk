@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 )
 
 type bytesBacked interface {

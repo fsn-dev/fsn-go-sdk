@@ -23,8 +23,8 @@ import (
 	"math"
 	"strings"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
 )
 
 // API describes the set of methods offered over the RPC interface

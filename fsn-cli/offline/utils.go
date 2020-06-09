@@ -20,14 +20,14 @@ import (
 	"math/big"
 	"time"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
-	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
-	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
+	clicommon "github.com/fsn-dev/fsn-go-sdk/fsn-cli/common"
+	"github.com/fsn-dev/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
 

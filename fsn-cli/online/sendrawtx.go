@@ -21,9 +21,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
 	"gopkg.in/urfave/cli.v1"
 )
 

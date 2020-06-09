@@ -22,7 +22,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
 )
 
 type keyStorePlain struct {

@@ -24,7 +24,7 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/math"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/math"
 	"gopkg.in/urfave/cli.v1"
 )
 

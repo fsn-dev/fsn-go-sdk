@@ -17,9 +17,9 @@
 package online
 
 import (
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/ethclient"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/ethclient"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 	"gopkg.in/urfave/cli.v1"
 )
 

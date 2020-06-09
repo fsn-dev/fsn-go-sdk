@@ -5,8 +5,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/keystore"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts/keystore"
 	"gopkg.in/urfave/cli.v1"
 )
 

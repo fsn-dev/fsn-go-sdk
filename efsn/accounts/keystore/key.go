@@ -29,9 +29,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 	"github.com/pborman/uuid"
 )
 

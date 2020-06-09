@@ -19,11 +19,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/keystore"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts/keystore"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
 	"gopkg.in/urfave/cli.v1"
 )
 

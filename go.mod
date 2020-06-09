@@ -1,4 +1,4 @@
-module github.com/FusionFoundation/fsn-go-sdk
+module github.com/fsn-dev/fsn-go-sdk
 
 go 1.13
 

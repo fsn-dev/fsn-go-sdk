@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
-	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/extensions"
-	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/offline"
-	"github.com/FusionFoundation/fsn-go-sdk/fsn-cli/online"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/fsn-dev/fsn-go-sdk/fsn-cli/extensions"
+	"github.com/fsn-dev/fsn-go-sdk/fsn-cli/offline"
+	"github.com/fsn-dev/fsn-go-sdk/fsn-cli/online"
 	"gopkg.in/urfave/cli.v1"
 )
 

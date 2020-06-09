@@ -17,10 +17,10 @@
 package offline
 
 import (
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
-	"github.com/FusionFoundation/fsn-go-sdk/fsnapi"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	clicommon "github.com/fsn-dev/fsn-go-sdk/fsn-cli/common"
+	"github.com/fsn-dev/fsn-go-sdk/fsnapi"
 	"gopkg.in/urfave/cli.v1"
 )
 

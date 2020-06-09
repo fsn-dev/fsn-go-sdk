@@ -22,9 +22,9 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/params"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/params"
 )
 
 var (

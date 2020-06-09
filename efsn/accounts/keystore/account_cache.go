@@ -27,10 +27,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
 	mapset "github.com/deckarep/golang-set"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 )
 
 // Minimum amount of time between cache reloads. This limit applies if the platform does

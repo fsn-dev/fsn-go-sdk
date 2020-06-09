@@ -22,10 +22,10 @@ import (
 	"io"
 	"io/ioutil"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/keystore"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts/keystore"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 )
 
 // NewTransactor is a utility method to easily create a transaction signer from

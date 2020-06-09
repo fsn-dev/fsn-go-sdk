@@ -26,8 +26,8 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/internal/jsre/deps"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/internal/jsre/deps"
 	"github.com/robertkrimen/otto"
 )
 

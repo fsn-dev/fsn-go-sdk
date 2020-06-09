@@ -10,8 +10,8 @@ import (
 	"bytes"
 	"math/big"
 
-	cloudflare "github.com/FusionFoundation/fsn-go-sdk/efsn/crypto/bn256/cloudflare"
-	google "github.com/FusionFoundation/fsn-go-sdk/efsn/crypto/bn256/google"
+	cloudflare "github.com/fsn-dev/fsn-go-sdk/efsn/crypto/bn256/cloudflare"
+	google "github.com/fsn-dev/fsn-go-sdk/efsn/crypto/bn256/google"
 )
 
 // FuzzAdd fuzzez bn256 addition between the Google and Cloudflare libraries.

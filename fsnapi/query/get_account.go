@@ -20,7 +20,7 @@ import (
 	"context"
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
 )
 
 func (c client) GetAccount(addr string) (*big.Int, error) {

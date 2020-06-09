@@ -23,9 +23,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/internal/rpc"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/internal/rpc"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
 	"github.com/robertkrimen/otto"
 )
 

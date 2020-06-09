@@ -21,8 +21,8 @@ import (
 	"io"
 	"sync/atomic"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
 	mapset "github.com/deckarep/golang-set"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 )
 
 const MetadataApi = "rpc"

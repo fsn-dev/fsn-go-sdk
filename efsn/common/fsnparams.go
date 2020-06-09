@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
 )
 
 /////////////////// param type ///////////////////////

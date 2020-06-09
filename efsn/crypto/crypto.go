@@ -28,9 +28,9 @@ import (
 	"math/big"
 	"os"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/math"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/math"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
 	"golang.org/x/crypto/sha3"
 )
 

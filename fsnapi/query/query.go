@@ -19,7 +19,7 @@ package query
 import (
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/ethclient"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/ethclient"
 )
 
 type QueryClient interface {

@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 )
 
 // Event is an event potentially triggered by the EVM's LOG mechanism. The Event

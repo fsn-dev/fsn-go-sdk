@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 )
 
 // TicketPrice  place holder for ticket price

@@ -23,8 +23,8 @@ import (
 	"crypto/elliptic"
 	"fmt"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/math"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto/secp256k1"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/math"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto/secp256k1"
 )
 
 // Ecrecover returns the uncompressed public key that created the given signature.

@@ -22,12 +22,12 @@ import (
 	"sync"
 	"time"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/ethclient"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
-	"github.com/FusionFoundation/fsn-go-sdk/mongosync/mongodb"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/ethclient"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
+	"github.com/fsn-dev/fsn-go-sdk/mongosync/mongodb"
 )
 
 var (

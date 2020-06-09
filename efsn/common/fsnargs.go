@@ -3,7 +3,7 @@ package common
 import (
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
 )
 
 type FSNBaseArgsInterface interface {

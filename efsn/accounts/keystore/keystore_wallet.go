@@ -19,9 +19,9 @@ package keystore
 import (
 	"math/big"
 
-	ethereum "github.com/FusionFoundation/fsn-go-sdk/efsn"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
+	ethereum "github.com/fsn-dev/fsn-go-sdk/efsn"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
 )
 
 // keystoreWallet implements the accounts.Wallet interface for the original

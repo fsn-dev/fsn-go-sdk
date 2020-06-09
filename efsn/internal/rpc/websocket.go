@@ -26,8 +26,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
 	mapset "github.com/deckarep/golang-set"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 	"github.com/gorilla/websocket"
 )
 

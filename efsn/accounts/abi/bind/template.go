@@ -16,7 +16,7 @@
 
 package bind
 
-import "github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/abi"
+import "github.com/fsn-dev/fsn-go-sdk/efsn/accounts/abi"
 
 // tmplData is the data structure required to fill the binding template.
 type tmplData struct {

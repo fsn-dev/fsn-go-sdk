@@ -20,8 +20,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
-	clicommon "github.com/FusionFoundation/fsn-go-sdk/fsn-cli/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
+	clicommon "github.com/fsn-dev/fsn-go-sdk/fsn-cli/common"
 	"gopkg.in/urfave/cli.v1"
 )
 

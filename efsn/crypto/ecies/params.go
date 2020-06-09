@@ -42,7 +42,7 @@ import (
 	"fmt"
 	"hash"
 
-	ethcrypto "github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
+	ethcrypto "github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 )
 
 var (

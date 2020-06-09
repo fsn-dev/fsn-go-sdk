@@ -22,9 +22,9 @@ import (
 	"math/big"
 	"strings"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/keystore"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts/keystore"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
 )
 
 type SignOptions struct {

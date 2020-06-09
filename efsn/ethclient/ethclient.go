@@ -24,12 +24,12 @@ import (
 	"fmt"
 	"math/big"
 
-	ethereum "github.com/FusionFoundation/fsn-go-sdk/efsn"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common/hexutil"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/internal/rpc"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/rlp"
+	ethereum "github.com/fsn-dev/fsn-go-sdk/efsn"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/internal/rpc"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
 )
 
 // Client defines typed wrappers for the Ethereum RPC API.

@@ -21,7 +21,7 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/internal/event"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/internal/event"
 )
 
 // Manager is an overarching account manager that can communicate with various

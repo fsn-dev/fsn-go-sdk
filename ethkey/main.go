@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/cmd/utils"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/cmd/utils"
 	"gopkg.in/urfave/cli.v1"
 )
 

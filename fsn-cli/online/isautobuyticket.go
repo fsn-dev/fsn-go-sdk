@@ -19,7 +19,7 @@ package online
 import (
 	"context"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/tools"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
 	"gopkg.in/urfave/cli.v1"
 )
 

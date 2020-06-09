@@ -19,7 +19,7 @@ package rpc
 import (
 	"net"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/log"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 )
 
 // StartHTTPEndpoint starts the HTTP RPC endpoint, configured with cors/vhosts/modules

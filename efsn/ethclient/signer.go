@@ -20,8 +20,8 @@ import (
 	"errors"
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
 )
 
 // senderFromServer is a types.Signer that remembers the sender address returned by the RPC

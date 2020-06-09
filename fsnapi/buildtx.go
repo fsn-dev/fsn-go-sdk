@@ -19,8 +19,8 @@ package fsnapi
 import (
 	"math/big"
 
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
 )
 
 func GenTxInput(funcType common.FSNCallFunc, args common.FSNBaseArgsInterface) ([]byte, error) {

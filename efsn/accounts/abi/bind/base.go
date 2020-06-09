@@ -22,12 +22,12 @@ import (
 	"fmt"
 	"math/big"
 
-	ethereum "github.com/FusionFoundation/fsn-go-sdk/efsn"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/accounts/abi"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/common"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/core/types"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/crypto"
-	"github.com/FusionFoundation/fsn-go-sdk/efsn/internal/event"
+	ethereum "github.com/fsn-dev/fsn-go-sdk/efsn"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/accounts/abi"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/core/types"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/internal/event"
 )
 
 // SignerFn is a signer function callback when a contract requires a method to
