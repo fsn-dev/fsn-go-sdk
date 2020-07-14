@@ -17,6 +17,7 @@
 package mongodb
 
 import (
+	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -27,6 +28,17 @@ var (
 	collectionSyncInfo    *mgo.Collection
 	collectionContracts   *mgo.Collection
 )
+
+func deinintCollections() {
+	collectionBlock = nil
+	collectionTransaction = nil
+	collectionSyncInfo = nil
+	collectionContracts = nil
+}
+
+func initCollections() {
+	InitLatestSyncInfo()
+}
 
 func getOrInitCollection(table string, collection **mgo.Collection, indexKey string) *mgo.Collection {
 	if *collection == nil {
@@ -54,12 +66,18 @@ func getCollection(table string) *mgo.Collection {
 
 // --------------- add ---------------------------------
 
-func AddBlock(mb *MgoBlock, overwrite bool) error {
+func AddBlock(mb *MgoBlock, overwrite bool) (err error) {
 	if overwrite {
-		_, err := getCollection(tbBlocks).UpsertId(mb.Key, mb)
-		return err
+		_, err = getCollection(tbBlocks).UpsertId(mb.Key, mb)
+	} else {
+		err = getCollection(tbBlocks).Insert(mb)
 	}
-	return getCollection(tbBlocks).Insert(mb)
+	if err == nil {
+		log.Info("[mongodb] AddBlock success", "number", mb.Number, "hash", mb.Hash)
+	} else if !mgo.IsDup(err) {
+		log.Warn("[mongodb] AddBlock failed", "number", mb.Number, "hash", mb.Hash, "err", err)
+	}
+	return err
 }
 
 func AddTransaction(mt *MgoTransaction, overwrite bool) error {

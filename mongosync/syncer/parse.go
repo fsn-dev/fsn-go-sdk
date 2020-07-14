@@ -17,6 +17,7 @@
 package syncer
 
 import (
+	"fmt"
 	"math/big"
 	"strings"
 	"sync"
@@ -39,16 +40,22 @@ const (
 	maxParseBlocks   int    = 1000
 )
 
-func tryDoTimes(name string, f func() error) {
-	var err error
+func tryDoTimes(name string, f func() error) (err error) {
+	defer func() {
+		if errf := recover(); errf != nil {
+			log.Error("recover from error", "err", errf)
+			err = fmt.Errorf("recover from error %v", errf)
+		}
+	}()
 	i := 0
 	for ; i < defaultTryTimes; i++ {
 		err = f()
 		if err == nil || mgo.IsDup(err) {
-			return
+			return nil
 		}
 	}
 	log.Warn("tryDoTimes", "name", name, "time", i, "err", err)
+	return err
 }
 
 func (w *Worker) Parse(block *types.Block, receipts types.Receipts) {

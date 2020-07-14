@@ -18,6 +18,8 @@ package syncer
 
 import (
 	"context"
+	"fmt"
+	"math"
 	"math/big"
 	"sync"
 	"time"
@@ -121,7 +123,7 @@ func (s *Syncer) Sync() {
 func (s *Syncer) dipatchWork() {
 	start := s.start
 	last := s.end
-	if s.start == 0 && s.end == 0 {
+	if s.start == 0 {
 		if syncInfo, err := mongodb.FindLatestSyncInfo(); err == nil {
 			start = syncInfo.Number
 			if start != 0 {
@@ -185,7 +187,6 @@ func (s *Syncer) dipatchWork() {
 }
 
 func (s *Syncer) doWork() {
-	mongodb.InitLatestSyncInfo()
 	if len(workers) != 0 {
 		s.doSyncWork()
 	}
@@ -301,7 +302,8 @@ func (w *Worker) calcSyncPercentage(height uint64) float64 {
 	if w.end <= w.start {
 		return 100
 	}
-	return 100 * float64(height-w.start) / float64(w.end-w.start)
+	percent := 100 * float64(height-w.start) / float64(w.end-w.start)
+	return math.Trunc(percent*100+0.5) / 100
 }
 
 func (w *Worker) syncRange(start, end uint64) {
@@ -447,10 +449,14 @@ func (s *Syncer) UpdateBlockInfo(wg *sync.WaitGroup) {
 				}
 			}
 			totalDifficulty := td + mb.Difficulty
-			err = mongodb.UpdateBlockInfo(mb.Key, blockTime, totalDifficulty)
+			err = tryDoTimes("UpdateBlockInfo "+mb.Key, func() error {
+				return mongodb.UpdateBlockInfo(mb.Key, blockTime, totalDifficulty)
+			})
 			if err == nil {
 				timestamp := mb.Timestamp
-				err = mongodb.UpdateSyncInfo(height, timestamp, totalDifficulty)
+				err = tryDoTimes("UpdateSyncInfo "+fmt.Sprintf("%d", height), func() error {
+					return mongodb.UpdateSyncInfo(height, timestamp, totalDifficulty)
+				})
 				if err == nil {
 					if height > last {
 						log.Info("update block completed", "number", height, "timestamp", timestamp, "td", totalDifficulty)
