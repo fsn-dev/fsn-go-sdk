@@ -22,55 +22,13 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var (
-	collectionBlock       *mgo.Collection
-	collectionTransaction *mgo.Collection
-	collectionSyncInfo    *mgo.Collection
-	collectionContracts   *mgo.Collection
-)
-
-func deinintCollections() {
-	collectionBlock = nil
-	collectionTransaction = nil
-	collectionSyncInfo = nil
-	collectionContracts = nil
-}
-
-func initCollections() {
-	InitLatestSyncInfo()
-}
-
-func getOrInitCollection(table string, collection **mgo.Collection, indexKey string) *mgo.Collection {
-	if *collection == nil {
-		*collection = database.C(table)
-		if indexKey != "" {
-			(*collection).EnsureIndexKey(indexKey)
-		}
-	}
-	return *collection
-}
-
-func getCollection(table string) *mgo.Collection {
-	switch table {
-	case tbBlocks:
-		return getOrInitCollection(table, &collectionBlock, "number")
-	case tbTransactions:
-		return getOrInitCollection(table, &collectionTransaction, "blockNumber")
-	case tbSyncInfo:
-		return getOrInitCollection(table, &collectionSyncInfo, "")
-	case tbContracts:
-		return getOrInitCollection(table, &collectionContracts, "")
-	}
-	panic("unknown talbe " + table)
-}
-
 // --------------- add ---------------------------------
 
 func AddBlock(mb *MgoBlock, overwrite bool) (err error) {
 	if overwrite {
-		_, err = getCollection(tbBlocks).UpsertId(mb.Key, mb)
+		_, err = collectionBlock.UpsertId(mb.Key, mb)
 	} else {
-		err = getCollection(tbBlocks).Insert(mb)
+		err = collectionBlock.Insert(mb)
 	}
 	if err == nil {
 		log.Info("[mongodb] AddBlock success", "number", mb.Number, "hash", mb.Hash)
@@ -82,14 +40,14 @@ func AddBlock(mb *MgoBlock, overwrite bool) (err error) {
 
 func AddTransaction(mt *MgoTransaction, overwrite bool) error {
 	if overwrite {
-		_, err := getCollection(tbTransactions).UpsertId(mt.Key, mt)
+		_, err := collectionTransaction.UpsertId(mt.Key, mt)
 		return err
 	}
-	return getCollection(tbTransactions).Insert(mt)
+	return collectionTransaction.Insert(mt)
 }
 
 func AddSyncInfo(msi *MgoSyncInfo) error {
-	return getCollection(tbSyncInfo).Insert(msi)
+	return collectionSyncInfo.Insert(msi)
 }
 
 func InitLatestSyncInfo() error {
@@ -104,13 +62,13 @@ func InitLatestSyncInfo() error {
 }
 
 func AddContract(mc *MgoContract) error {
-	return getCollection(tbContracts).Insert(mc)
+	return collectionContracts.Insert(mc)
 }
 
 // --------------- update ---------------------------------
 
 func UpdateSyncInfo(num, timestamp, td uint64) error {
-	return getCollection(tbSyncInfo).UpdateId(KeyOfLatestSyncInfo,
+	return collectionSyncInfo.UpdateId(KeyOfLatestSyncInfo,
 		bson.M{"$set": bson.M{
 			"number":          num,
 			"timestamp":       timestamp,
@@ -119,7 +77,7 @@ func UpdateSyncInfo(num, timestamp, td uint64) error {
 }
 
 func UpdateBlockInfo(key string, blocktime, td uint64) error {
-	return getCollection(tbBlocks).UpdateId(key,
+	return collectionBlock.UpdateId(key,
 		bson.M{"$set": bson.M{
 			"blockTime":       blocktime,
 			"totalDifficulty": td,
@@ -129,22 +87,22 @@ func UpdateBlockInfo(key string, blocktime, td uint64) error {
 // --------------- delete ---------------------------------
 
 func DeleteBlock(hash string) error {
-	return getCollection(tbBlocks).Remove(bson.M{"hash": hash})
+	return collectionBlock.Remove(bson.M{"hash": hash})
 }
 
 func DeleteTransaction(hash string) error {
-	return getCollection(tbTransactions).Remove(bson.M{"hash": hash})
+	return collectionTransaction.Remove(bson.M{"hash": hash})
 }
 
 func DeleteLatestSyncInfo() error {
-	return getCollection(tbSyncInfo).RemoveId(KeyOfLatestSyncInfo)
+	return collectionSyncInfo.RemoveId(KeyOfLatestSyncInfo)
 }
 
 // --------------- find ---------------------------------
 
 func FindBlockByNumber(num uint64) (*MgoBlock, error) {
 	var block MgoBlock
-	err := getCollection(tbBlocks).Find(bson.M{"number": num}).One(&block)
+	err := collectionBlock.Find(bson.M{"number": num}).One(&block)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +111,7 @@ func FindBlockByNumber(num uint64) (*MgoBlock, error) {
 
 func FindBlock(hash string) (*MgoBlock, error) {
 	var block MgoBlock
-	err := getCollection(tbBlocks).Find(bson.M{"hash": hash}).One(&block)
+	err := collectionBlock.Find(bson.M{"hash": hash}).One(&block)
 	if err != nil {
 		return nil, err
 	}
@@ -163,7 +121,7 @@ func FindBlock(hash string) (*MgoBlock, error) {
 func FindBlocksInRange(start, end uint64) ([]*MgoBlock, error) {
 	count := int(end - start + 1)
 	blocks := make([]*MgoBlock, count)
-	iter := getCollection(tbBlocks).Find(bson.M{"number": bson.M{"$gte": start, "$lte": end}}).Limit(count).Iter()
+	iter := collectionBlock.Find(bson.M{"number": bson.M{"$gte": start, "$lte": end}}).Limit(count).Iter()
 	err := iter.All(&blocks)
 	if err != nil {
 		return nil, err
@@ -173,7 +131,7 @@ func FindBlocksInRange(start, end uint64) ([]*MgoBlock, error) {
 
 func FindTransaction(hash string) (*MgoTransaction, error) {
 	var tx MgoTransaction
-	err := getCollection(tbTransactions).Find(bson.M{"hash": hash}).One(&tx)
+	err := collectionTransaction.Find(bson.M{"hash": hash}).One(&tx)
 	if err != nil {
 		return nil, err
 	}
@@ -182,7 +140,7 @@ func FindTransaction(hash string) (*MgoTransaction, error) {
 
 func FindLatestSyncInfo() (*MgoSyncInfo, error) {
 	var info MgoSyncInfo
-	err := getCollection(tbSyncInfo).FindId(KeyOfLatestSyncInfo).One(&info)
+	err := collectionSyncInfo.FindId(KeyOfLatestSyncInfo).One(&info)
 	if err != nil {
 		return nil, err
 	}
@@ -191,7 +149,7 @@ func FindLatestSyncInfo() (*MgoSyncInfo, error) {
 
 func FindContract(address string) (*MgoContract, error) {
 	var contract MgoContract
-	err := getCollection(tbContracts).FindId(address).One(&contract)
+	err := collectionContracts.FindId(address).One(&contract)
 	if err != nil {
 		return nil, err
 	}
