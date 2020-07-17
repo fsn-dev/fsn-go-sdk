@@ -216,6 +216,7 @@ func (w *Worker) parseTx(i int, tx *types.Transaction, block *types.Block, recei
 	} else {
 		if receipt != nil && len(receipt.Logs) != 0 {
 			mt.Log = parseReceiptLogs(receipt.Logs) // mt.Log
+			parseReceipt(mt, receipt)               // erc20, exchange, etc
 		}
 		mc, _ := mongodb.FindContract(mt.To)
 		if mc != nil {
