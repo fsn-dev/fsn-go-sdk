@@ -34,6 +34,14 @@ var (
 		Usage: "database name",
 		Value: "fusion",
 	}
+	dbUserFlag = cli.StringFlag{
+		Name:  "dbUser",
+		Usage: "database user name",
+	}
+	dbPassFlag = cli.StringFlag{
+		Name:  "dbPass",
+		Usage: "database password",
+	}
 	stableFlag = cli.Uint64Flag{
 		Name:  "stable",
 		Usage: "sync blocks that is stable lower than the latest",
@@ -69,6 +77,8 @@ severURL support "http", "https", "ws", "wss", "stdio", IPC file`,
 	Flags: []cli.Flag{
 		mongoURLFlag,
 		dbNameFlag,
+		dbUserFlag,
+		dbPassFlag,
 		stableFlag,
 		startFlag,
 		endFlag,
@@ -87,6 +97,8 @@ func syncAll(ctx *cli.Context) error {
 	serverAddress := ctx.Args().First()
 	mongoURL := ctx.String(mongoURLFlag.Name)
 	dbName := ctx.String(dbNameFlag.Name)
+	dbUser := ctx.String(dbUserFlag.Name)
+	dbPass := ctx.String(dbPassFlag.Name)
 	stable := ctx.Uint64(stableFlag.Name)
 	start := ctx.Uint64(startFlag.Name)
 	end := ctx.Uint64(endFlag.Name)
@@ -100,7 +112,7 @@ func syncAll(ctx *cli.Context) error {
 	syncer.ArchiveMode = archiveMode
 	syncer.BlockInterval = interval
 	syncer.SetJobCount(jobs)
-	syncer.InitMongoServer(mongoURL, dbName)
+	syncer.InitMongoServer(mongoURL, dbName, dbUser, dbPass)
 	syncer.NewSyncer(stable, start, end).Sync()
 
 	return nil

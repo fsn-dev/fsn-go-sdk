@@ -30,6 +30,7 @@ import (
 	"github.com/fsn-dev/fsn-go-sdk/efsn/log"
 	"github.com/fsn-dev/fsn-go-sdk/efsn/tools"
 	"github.com/fsn-dev/fsn-go-sdk/mongosync/mongodb"
+	"gopkg.in/mgo.v2"
 )
 
 var (
@@ -93,8 +94,21 @@ func SetJobCount(count uint64) {
 	JobCount = count
 }
 
-func InitMongoServer(mongoURL, dbName string) {
-	mongodb.MongoServerInit(mongoURL, dbName)
+func InitMongoServer(mongoURL, dbName, dbUser, dbPassword string) {
+	var addrs []string
+	if dbUser == "" && dbPassword == "" {
+		dialInfo, err := mgo.ParseURL(mongoURL)
+		if err != nil {
+			log.Error("parse mongo URL error %v", err)
+			panic("parse mongo URL error " + err.Error())
+		}
+		addrs = dialInfo.Addrs
+		dbUser = dialInfo.Username
+		dbPassword = dialInfo.Password
+	} else {
+		addrs = []string{mongoURL}
+	}
+	mongodb.MongoServerInit(addrs, dbName, dbUser, dbPassword)
 }
 
 func DialServer() (err error) {
