@@ -48,7 +48,7 @@ type Receipt struct {
 	PostState         []byte `json:"root"`
 	Status            uint64 `json:"status"`
 	CumulativeGasUsed uint64 `json:"cumulativeGasUsed" gencodec:"required"`
-	Bloom             Bloom  `json:"logsBloom"         gencodec:"required"`
+	Bloom             Bloom  `json:"logsBloom"`
 	Logs              []*Log `json:"logs"              gencodec:"required"`
 
 	// Implementation fields (don't reorder!)
