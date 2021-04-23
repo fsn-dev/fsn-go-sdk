@@ -81,7 +81,7 @@ type Header struct {
 	GasUsed     uint64         `json:"gasUsed"          gencodec:"required"`
 	Time        *big.Int       `json:"timestamp"        gencodec:"required"`
 	Extra       []byte         `json:"extraData"        gencodec:"required"`
-	MixDigest   common.Hash    `json:"mixHash"          gencodec:"required"` // NOTE: store `tickets CodeHash` now
+	MixDigest   common.Hash    `json:"mixHash"`                              // NOTE: store `tickets CodeHash` now
 	Nonce       BlockNonce     `json:"nonce"            gencodec:"required"` // NOTE: store `selected ticket's Order number` now
 
 	selectedTicket *common.Ticket        // NOTE: cache result of difficulty calculation
