@@ -29,7 +29,7 @@ func (h Header) MarshalJSON() ([]byte, error) {
 		Time        *hexutil.Big   `json:"timestamp"        gencodec:"required"`
 		Extra       hexutil.Bytes  `json:"extraData"        gencodec:"required"`
 		MixDigest   common.Hash    `json:"mixHash"`
-		Nonce       BlockNonce     `json:"nonce"            gencodec:"required"`
+		Nonce       BlockNonce     `json:"nonce"`
 		Hash        common.Hash    `json:"hash"`
 	}
 	var enc Header
@@ -68,7 +68,7 @@ func (h *Header) UnmarshalJSON(input []byte) error {
 		Time        *hexutil.Big    `json:"timestamp"        gencodec:"required"`
 		Extra       *hexutil.Bytes  `json:"extraData"        gencodec:"required"`
 		MixDigest   *common.Hash    `json:"mixHash"`
-		Nonce       *BlockNonce     `json:"nonce"            gencodec:"required"`
+		Nonce       *BlockNonce     `json:"nonce"`
 	}
 	var dec Header
 	if err := json.Unmarshal(input, &dec); err != nil {
@@ -129,10 +129,9 @@ func (h *Header) UnmarshalJSON(input []byte) error {
 	if dec.MixDigest != nil {
 		h.MixDigest = *dec.MixDigest
 	}
-	if dec.Nonce == nil {
-		return errors.New("missing required field 'nonce' for Header")
+	if dec.Nonce != nil {
+		h.Nonce = *dec.Nonce
 	}
-	h.Nonce = *dec.Nonce
 	return nil
 }
 
