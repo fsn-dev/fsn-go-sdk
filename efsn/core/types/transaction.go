@@ -25,7 +25,6 @@ import (
 
 	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
 	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
-	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
 )
 
@@ -152,16 +151,6 @@ func (tx *Transaction) UnmarshalJSON(input []byte) error {
 	var dec txdata
 	if err := dec.UnmarshalJSON(input); err != nil {
 		return err
-	}
-	var V byte
-	if isProtectedV(dec.V) {
-		chainID := deriveChainId(dec.V).Uint64()
-		V = byte(dec.V.Uint64() - 35 - 2*chainID)
-	} else {
-		V = byte(dec.V.Uint64() - 27)
-	}
-	if !crypto.ValidateSignatureValues(V, dec.R, dec.S, false) {
-		return ErrInvalidSig
 	}
 	*tx = Transaction{data: dec}
 	return nil
