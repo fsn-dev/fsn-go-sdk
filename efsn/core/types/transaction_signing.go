@@ -28,7 +28,8 @@ import (
 )
 
 var (
-	ErrInvalidChainId = errors.New("invalid chain id for signer")
+	ErrInvalidChainId     = errors.New("invalid chain id for signer")
+	ErrTxTypeNotSupported = errors.New("transaction type not supported")
 )
 
 // sigCache is used to cache the derived sender and contains

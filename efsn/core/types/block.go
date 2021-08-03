@@ -29,7 +29,6 @@ import (
 	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
 	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
 	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
-	"golang.org/x/crypto/sha3"
 )
 
 var (
@@ -125,13 +124,6 @@ func (h *Header) Hash() common.Hash {
 // to approximate and limit the memory consumption of various caches.
 func (h *Header) Size() common.StorageSize {
 	return common.StorageSize(unsafe.Sizeof(*h)) + common.StorageSize(len(h.Extra)+(h.Difficulty.BitLen()+h.Number.BitLen()+h.Time.BitLen())/8)
-}
-
-func rlpHash(x interface{}) (h common.Hash) {
-	hw := sha3.NewLegacyKeccak256()
-	rlp.Encode(hw, x)
-	hw.Sum(h[:0])
-	return h
 }
 
 // Body is a simple (mutable, non-safe) data container for storing and moving

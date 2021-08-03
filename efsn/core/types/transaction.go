@@ -19,20 +19,33 @@ package types
 import (
 	"container/heap"
 	"errors"
-	"io"
 	"math/big"
+	"sync"
 	"sync/atomic"
 
 	"github.com/fsn-dev/fsn-go-sdk/efsn/common"
-	"github.com/fsn-dev/fsn-go-sdk/efsn/common/hexutil"
+	"github.com/fsn-dev/fsn-go-sdk/efsn/crypto"
 	"github.com/fsn-dev/fsn-go-sdk/efsn/rlp"
+	"golang.org/x/crypto/sha3"
 )
 
 //go:generate gencodec -type txdata -field-override txdataMarshaling -out gen_tx_json.go
 
+// Transaction types.
+const (
+	LegacyTxType = iota
+	AccessListTxType
+	DynamicFeeTxType
+)
+
 var (
 	ErrInvalidSig = errors.New("invalid transaction v, r, s values")
 )
+
+// hasherPool holds LegacyKeccak256 hashers for rlpHash.
+var hasherPool = sync.Pool{
+	New: func() interface{} { return sha3.NewLegacyKeccak256() },
+}
 
 type Transaction struct {
 	data txdata
@@ -40,34 +53,6 @@ type Transaction struct {
 	hash atomic.Value
 	size atomic.Value
 	from atomic.Value
-}
-
-type txdata struct {
-	AccountNonce uint64          `json:"nonce"    gencodec:"required"`
-	Price        *big.Int        `json:"gasPrice" gencodec:"required"`
-	GasLimit     uint64          `json:"gas"      gencodec:"required"`
-	Recipient    *common.Address `json:"to"       rlp:"nil"` // nil means contract creation
-	Amount       *big.Int        `json:"value"    gencodec:"required"`
-	Payload      []byte          `json:"input"    gencodec:"required"`
-
-	// Signature values
-	V *big.Int `json:"v" gencodec:"required"`
-	R *big.Int `json:"r" gencodec:"required"`
-	S *big.Int `json:"s" gencodec:"required"`
-
-	// This is only used when marshaling to JSON.
-	Hash *common.Hash `json:"hash" rlp:"-"`
-}
-
-type txdataMarshaling struct {
-	AccountNonce hexutil.Uint64
-	Price        *hexutil.Big
-	GasLimit     hexutil.Uint64
-	Amount       *hexutil.Big
-	Payload      hexutil.Bytes
-	V            *hexutil.Big
-	R            *hexutil.Big
-	S            *hexutil.Big
 }
 
 func NewTransaction(nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) *Transaction {
@@ -103,9 +88,17 @@ func newTransaction(nonce uint64, to *common.Address, amount *big.Int, gasLimit 
 	return &Transaction{data: d}
 }
 
-// ChainId returns which chain id this transaction was signed for (if at all)
+// Type returns tx type
+func (tx *Transaction) Type() uint8 {
+	return tx.data.Type
+}
+
+// ChainID returns which chain id this transaction was signed for (if at all)
 func (tx *Transaction) ChainId() *big.Int {
-	return deriveChainId(tx.data.V)
+	if tx.Type() == LegacyTxType {
+		return deriveChainId(tx.data.V)
+	}
+	return new(big.Int).Set(tx.data.ChainID)
 }
 
 // Protected returns whether the transaction is protected from replay protection.
@@ -120,22 +113,6 @@ func isProtectedV(V *big.Int) bool {
 	}
 	// anything not 27 or 28 is considered protected
 	return true
-}
-
-// EncodeRLP implements rlp.Encoder
-func (tx *Transaction) EncodeRLP(w io.Writer) error {
-	return rlp.Encode(w, &tx.data)
-}
-
-// DecodeRLP implements rlp.Decoder
-func (tx *Transaction) DecodeRLP(s *rlp.Stream) error {
-	_, size, _ := s.Kind()
-	err := s.Decode(&tx.data)
-	if err == nil {
-		tx.size.Store(common.StorageSize(rlp.ListSize(size)))
-	}
-
-	return err
 }
 
 // MarshalJSON encodes the web3 RPC transaction format.
@@ -173,17 +150,6 @@ func (tx *Transaction) To() *common.Address {
 	return &to
 }
 
-// Hash hashes the RLP encoding of tx.
-// It uniquely identifies the transaction.
-func (tx *Transaction) Hash() common.Hash {
-	if hash := tx.hash.Load(); hash != nil {
-		return hash.(common.Hash)
-	}
-	v := rlpHash(tx)
-	tx.hash.Store(v)
-	return v
-}
-
 // Size returns the true RLP encoded storage size of the transaction, either by
 // encoding and returning it, or returning a previsouly cached value.
 func (tx *Transaction) Size() common.StorageSize {
@@ -194,6 +160,54 @@ func (tx *Transaction) Size() common.StorageSize {
 	rlp.Encode(&c, &tx.data)
 	tx.size.Store(common.StorageSize(c))
 	return common.StorageSize(c)
+}
+
+// GasTipCap gas tip cap
+func (tx *Transaction) GasTipCap() *big.Int {
+	if tx.data.MaxPriorityFeePerGas != nil {
+		return new(big.Int).Set(tx.data.MaxPriorityFeePerGas)
+	}
+	return nil
+}
+
+// GasFeeCap gas fee cap
+func (tx *Transaction) GasFeeCap() *big.Int {
+	if tx.data.MaxFeePerGas != nil {
+		return new(big.Int).Set(tx.data.MaxFeePerGas)
+	}
+	return nil
+}
+
+// AccessList returns the access list of the transaction.
+func (tx *Transaction) AccessList() AccessList {
+	length := len(tx.data.AccessList)
+	accessList := make(AccessList, length)
+	if length > 0 {
+		copy(accessList, tx.data.AccessList)
+	}
+	return accessList
+}
+
+// rlpHash encodes x and hashes the encoded bytes.
+func rlpHash(x interface{}) (h common.Hash) {
+	sha := hasherPool.Get().(crypto.KeccakState)
+	defer hasherPool.Put(sha)
+	sha.Reset()
+	rlp.Encode(sha, x)
+	sha.Read(h[:])
+	return h
+}
+
+// prefixedRlpHash writes the prefix into the hasher before rlp-encoding x.
+// It's used for typed transactions.
+func prefixedRlpHash(prefix byte, x interface{}) (h common.Hash) {
+	sha := hasherPool.Get().(crypto.KeccakState)
+	defer hasherPool.Put(sha)
+	sha.Reset()
+	sha.Write([]byte{prefix})
+	rlp.Encode(sha, x)
+	sha.Read(h[:])
+	return h
 }
 
 // AsMessage returns the transaction as a core.Message.

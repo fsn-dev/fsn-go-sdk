@@ -16,6 +16,7 @@ require (
 	github.com/rjeczalik/notify v0.9.2
 	github.com/robertkrimen/otto v0.0.0-20180617131154-15f95af6e78d
 	github.com/rs/cors v1.7.0
+	github.com/tendermint/go-amino v0.16.0
 	golang.org/x/crypto v0.0.0-20191202143827-86a70503ff7e
 	golang.org/x/sys v0.0.0-20191008105621-543471e840be
 	golang.org/x/tools v0.0.0-20190912185636-87d9f09c5d89
