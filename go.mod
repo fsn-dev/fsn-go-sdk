@@ -18,7 +18,7 @@ require (
 	github.com/rs/cors v1.7.0
 	github.com/tendermint/go-amino v0.16.0
 	golang.org/x/crypto v0.0.0-20191202143827-86a70503ff7e
-	golang.org/x/sys v0.0.0-20191008105621-543471e840be
+	golang.org/x/sys v0.1.0
 	golang.org/x/tools v0.0.0-20190912185636-87d9f09c5d89
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce
